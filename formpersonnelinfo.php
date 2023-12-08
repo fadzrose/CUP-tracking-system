@@ -10,15 +10,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
     $xphone = $_POST['psPhone'];
 
     $sqlupd = "UPDATE `personnel` SET `name` = '$xname' , `position` = '$xposition', `phone` = '$xphone' WHERE  `personnelId` = '$xidMem';";
-    echo "SQL query: " . $sqlupd; // Check the formed SQL query
+    //echo "SQL query: " . $sqlupd; // Check the formed SQL query
 
-    $chkerr = mysqli_query($dbc, $sqlupd);
-    if ($chkerr) {
+    $result = mysqli_query($dbc, $sqlupd); // $connection is your database connection object
+
+    if (!$result) {
+        // Handle the query error
+        echo "Warning: Failed to save. MySQL Error: " . mysqli_error($dbc);
+    } else {
+        // Query executed successfully
         echo '<script>alert("Personnel details have been saved");</script>';
         print '<script>window.location.assign("loginpage.php");</script>';
-    } else {
-        echo "<script>alert('Warning: Failed to save. MySQL Error: " . mysqli_error($dbc) . "')</script>";
     }
+   
 }
 ?>
 <!DOCTYPE html>

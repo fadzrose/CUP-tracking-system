@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 
@@ -160,11 +159,12 @@
         }
 
         /* Style page content - use this if you want to push the page content to the right when you open the side navigation*/
-        
+
         main {
             transition: margin-left .5s;
             /* If you want a transition effect */
-            padding: 20px;}
+            padding: 20px;
+        }
 
         /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
         @media screen and (max-height: 450px) {
@@ -196,18 +196,19 @@
         <br>
         <!-- Divider -->
         <hr class="hr hr-blurry" />
-        <a href="#">Dashboard</a>
+        <a href="manager_page.php">Dashboard</a>
         <!-- Divider -->
         <hr class="hr hr-blurry" />
 
-        <a href="#">Project</a>
-        <a href="#">Report</a>
+        <a href="allprojectlist.php">Project</a>
+        <a href="reportbyCategory.php">Report</a>
+        
         <!-- Divider -->
         <hr class="hr hr-blurry" />
 
         <a href="#">Log out</a>
     </div>
-    
+
     <br>
     <div id="main">
 

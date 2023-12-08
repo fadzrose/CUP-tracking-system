@@ -195,12 +195,12 @@
         <br>
         <!-- Divider -->
         <hr class="hr hr-blurry" />
-        <a href="manager_page.php">Dashboard</a>
+        <a href="#">Dashboard</a>
         <!-- Divider -->
         <hr class="hr hr-blurry" />
 
-        <a href="allprojectlist.php">Project</a>
-        <a href="reportbyCategory.php">Report</a>
+        <a href="#">Project</a>
+        <a href="#">Report</a>
         <!-- Divider -->
         <hr class="hr hr-blurry" />
 
@@ -208,23 +208,47 @@
     </div>
     <br>
     <div id="main" class="card">
-        <div class="form-row">
-            <table width="100%">
-                <tr>
-                    <th>
-                        <h2>Project List</h2>
-                    </th>
-                    <th style="text-align: right;"><a href="newproject.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i>Add New Project</a></th>
-                </tr>
-            </table>
 
+        <h2>Collapsed Sidebar</h2>
 
-        </div>
         <div>
             <div class="card-header py-3">
                 <div class="form-row justify-content-between align-items-center">
                     <h5 class="m-0 font-weight-bold text-dark">Details of Projects</h5>
+                    <ul class="nav-item dropdown no-arrow mx-1">
+                        <a href="#" class="btn btn-secondary btn-icon-split nav-link dropdown-toggle ml-auto" id="sortingDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <span class="icon text-white-50">
+                                <i class="fas fa-caret-down"></i>
+                            </span>
+                            <span class="text">Sort by Project</span>
+                        </a>
 
+                        <!-- Dropdown - Sorting -->
+                        <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="sortingDropdown">
+                            <a class="dropdown-item" href="allprojectlist.php">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                sort by Project
+                            </a>
+                            <a class="dropdown-item" href="sortprogresslist.php">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                sort by Progress
+                            </a>
+                            <a class="dropdown-item" href="sorteditorlist.php">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                sort by Editor
+                            </a>
+                            <a class="dropdown-item" href="sortdesignerlist.php">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                sort by Graphic Designer
+                            </a>
+                            <a class="dropdown-item" href="sortillustratorlist.php">
+                                <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
+                                sort by Illustrator
+                            </a>
+
+
+                        </div>
+                    </ul>
                 </div>
             </div>
             <div class="card-body">
@@ -242,7 +266,6 @@
                                 <th>Action</th>
 
                             </tr>
-
                         </thead>
                     </table>
                 </div>
