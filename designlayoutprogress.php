@@ -14,7 +14,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
     $xprojdue = $_POST['DLdue'];
     $xapprovalstat = $_POST['DLstatus'];
     $xpercentage = $_POST['DLprogress'];
-    $xcover = $_POST['projectCover'];
+    $xcover = $_FILES['projectCover']['name'];
+    $tempname = $_FILES['projectCover']['tmp_name'];
+    $folder = "cover/" . $xcover;
+    if (move_uploaded_file($tempname, $folder)) {
+        echo "File uploaded successfully.";
+    } else {
+        echo "Error uploading file.";
+    }
+
 
     //$xprojstart = $_POST['MRStartDate'];
     $xMRdue = $_POST['MRTargetDate'];
