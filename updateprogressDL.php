@@ -55,10 +55,8 @@ if ($dbc->query($sqlinproject) === TRUE) {
 
         if ($chkerrEC && $chkerrEP && $chkerrDT && $chkerrDC && $chkerrIT && $chkerrIC) {
             // All queries executed successfully
-            print "<script>alert('The project have been recorded.')</script>";
-            
-            header("Location: designlayoutprogress.php?id=" . $last_projectid);
-            exit(); // Ensure no further code execution after redirection
+            print "<script>alert('Records added to all tables')</script>";
+            print '<script>window.location.assign("designlayoutprogress.php");</script>';
         } else {
             // At least one query failed
             echo "Error: " . $dbc->error;
@@ -70,8 +68,4 @@ if ($dbc->query($sqlinproject) === TRUE) {
         // Handle the failure as needed
     }
     $stmt->close();
-
 }
-
-
-
