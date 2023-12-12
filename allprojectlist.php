@@ -234,7 +234,8 @@
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
-                            <tr><th>Cover</th>
+                            <tr>
+                                <th>Cover</th>
                                 <th>Title</th>
                                 <th>Series</th>
                                 <th>Category</th>
@@ -277,6 +278,62 @@
                                                 </a>
 
                                                 <a href="deleteProject.php?id=' . $row['projectId'] . '" class="btn btn-danger btn-icon-split">
+                                                    
+                                                <span class="text">Delete</span>
+                                                </a>
+
+                                            </td>
+                                        </tr>';
+                        }
+                        ?>
+                    </table>
+
+                    <hr class="hr hr-blurry" />
+                    
+                        <?php
+                        include "dbconnect.php";
+                        $sql = "SELECT project.*, design_layout.* 
+                                FROM project 
+                                LEFT JOIN design_layout ON project.projectId = design_layout.projectId
+                                WHERE design_layout.projectId IS NULL OR design_layout.projectCover IS NULL"; // Fetch projects with incomplete details
+                        $result = mysqli_query($dbc, $sql);
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            // Display incomplete projects here {
+                            echo
+                            '<div class="card-header py-3">
+                        <div class="form-row justify-content-between align-items-center">
+                            <h5 class="m-0 font-weight-bold text-dark">Incomplete Projects Details</h5>
+
+                        </div>
+                    </div><br>
+
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Cover</th>
+                                <th>Title</th>
+                                <th>Series</th>
+                                <th>Category</th>
+                                <th>Size</th>
+                                <th>Total Pages</th>
+                                <th>Type of Design</th>
+                                <th>Finishing</th>
+                                <th>Action</th>
+
+                            </tr>
+
+                        </thead>
+                            <tr>
+                            <td><img src="cover/' . $row['projectCover'] . '" width="74" height="105" </td>
+                                            <td>' . $row['title'] . '</td>
+                                            <td>' . $row['siri'] . '</td>
+                                            <td>' . $row['category'] . '</td>
+                                            <td>' . $row['projectSize'] . '</td>
+                                            <td>' . $row['totalPages'] . '</td>
+                                            <td>' . $row['typeOfDesign'] . '</td>
+                                            <td>' . $row['typeOfFinishing'] . '</td>
+
+                                            <td> <a href="deleteProject.php?id=' . $row['projectId'] . '" class="btn btn-danger btn-icon-split">
                                                     
                                                 <span class="text">Delete</span>
                                                 </a>

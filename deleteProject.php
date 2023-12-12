@@ -12,6 +12,8 @@ if ($resultFetchMemberId) {
     $row = mysqli_fetch_assoc($resultFetchMemberId);
     $memberId = $row['memberId'];
 
+    
+
     // Delete records from tables related to memberId first
     $sqldel4 = "DELETE FROM `designer_cover` WHERE `memberId`='$memberId';";
     $sqldel5 = "DELETE FROM `designer_text` WHERE `memberId`='$memberId';";
