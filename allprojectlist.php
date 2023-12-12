@@ -249,13 +249,14 @@
                         </thead>
                         <?php
                         include "dbconnect.php";
-                        $sql = "SELECT * FROM project";
-                        
+                        $sql = "SELECT project.*, design_layout.* 
+                                FROM project 
+                                INNER JOIN design_layout ON project.projectId = design_layout.projectId"; // Modify the join condition based on your actual table structure
                         $result = mysqli_query($dbc, $sql);
                         while ($row = mysqli_fetch_assoc($result)) {
                             echo
                             '<tr>
-                            <td><img src="cover/' . $row['projectCover'] . '" width="100" height="100" </td>
+                            <td><img src="cover/' . $row['projectCover'] . '" width="74" height="105" </td>
                                             <td>' . $row['title'] . '</td>
                                             <td>' . $row['siri'] . '</td>
                                             <td>' . $row['category'] . '</td>
