@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
     $tempname = $_FILES['projectCover']['tmp_name'];
     $folder = "cover/" . $xcover;
     if (move_uploaded_file($tempname, $folder)) {
-        echo "File uploaded successfully.";
+        echo '<script>alert("Cover have been saved.");</script>';
     } else {
         echo "Error uploading file.";
     }
@@ -87,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
         } while (mysqli_next_result($dbc));
 
         // All queries executed successfully
-        echo '<script>alert("All queries executed successfully.");</script>';
+        echo '<script>alert("Progress have been saved.");</script>';
         print '<script>window.location.assign("allprojectlist.php");</script>';
     } else {
         // At least one query failed

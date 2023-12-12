@@ -58,6 +58,7 @@
 
             max-width: 90%;
             margin: auto;
+
             text-align: left;
             font-family: arial;
             padding: 20px;
@@ -163,6 +164,8 @@
             transition: margin-left .5s;
             /* If you want a transition effect */
             padding: 20px;
+            padding-bottom: 80px;
+            /* Sesuaikan dengan tinggi footer Anda */
         }
 
         /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
@@ -231,7 +234,7 @@
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
-                            <tr>
+                            <tr><th>Cover</th>
                                 <th>Title</th>
                                 <th>Series</th>
                                 <th>Category</th>
@@ -244,6 +247,43 @@
                             </tr>
 
                         </thead>
+                        <?php
+                        include "dbconnect.php";
+                        $sql = "SELECT * FROM project";
+                        
+                        $result = mysqli_query($dbc, $sql);
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo
+                            '<tr>
+                            <td><img src="cover/' . $row['projectCover'] . '" width="100" height="100" </td>
+                                            <td>' . $row['title'] . '</td>
+                                            <td>' . $row['siri'] . '</td>
+                                            <td>' . $row['category'] . '</td>
+                                            <td>' . $row['projectSize'] . '</td>
+                                            <td>' . $row['totalPages'] . '</td>
+                                            <td>' . $row['typeOfDesign'] . '</td>
+                                            <td>' . $row['typeOfFinishing'] . '</td>
+
+                                            <td> 
+                                            
+                                            <a href="editProject.php?id=' . $row['projectId'] . '" class="btn btn-warning">
+                                                    
+                                                <span class="text">Edit</span>
+                                                </a>
+                                                <a href="updateprogress.php?id=' . $row['projectId'] . '" class="btn btn-info btn-icon-split">
+                                                    
+                                                <span class="text">Update</span>
+                                                </a>
+
+                                                <a href="deleteProject.php?id=' . $row['projectId'] . '" class="btn btn-danger btn-icon-split">
+                                                    
+                                                <span class="text">Delete</span>
+                                                </a>
+
+                                            </td>
+                                        </tr>';
+                        }
+                        ?>
                     </table>
                 </div>
             </div>
