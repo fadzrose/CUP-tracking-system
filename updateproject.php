@@ -28,9 +28,8 @@ if (mysqli_connect_errno()) {
 
 $sqlinproject = "UPDATE `project` SET `title` = '$xtitle' , `siri` = '$xsiri', `category` = '$xcategory', `typeOfDesign` = '$xdesign', `typeOfFinishing` = '$xfinishing', `projectSize` = '$xsize', `totalPages` = '$xpages', `IlusPages` = '$xIpage' WHERE  `projectId` = '$xprojId';";
 if ($dbc->query($sqlinproject) === TRUE) {
-    $last_projectid = $dbc->insert_id;
+    
 
-    $sqlinmember = "UPDATE `member` SET  `writerName` = '?' WHERE `projectId` = '$xprojId';";
 
     // Your previous code...
 
@@ -50,6 +49,10 @@ if ($dbc->query($sqlinproject) === TRUE) {
         $sqlIT = "UPDATE illustrator_text SET `personnelId` = '$xItext' WHERE `memberId` = '$memberIdToUpdate'";
         $sqlIC = "UPDATE illustrator_cover SET `personnelId` = '$xIcover' WHERE `memberId` = '$memberIdToUpdate'";
 
+
+        $sqlinmember = "UPDATE `member` SET  `writerName` = '$xwriter' WHERE `projectId` = '$xprojId';";
+        $chkerrmem = $dbc->query($sqlinmember);
+
         // Execute queries for updating member-related junction tables
         $chkerrEC = $dbc->query($sqlEC);
         $chkerrEP = $dbc->query($sqlEP);
@@ -58,7 +61,7 @@ if ($dbc->query($sqlinproject) === TRUE) {
         $chkerrIT = $dbc->query($sqlIT);
         $chkerrIC = $dbc->query($sqlIC);
 
-        if ($chkerrEC && $chkerrEP && $chkerrDT && $chkerrDC && $chkerrIT && $chkerrIC) {
+        if ($chkerrEC && $chkerrEP && $chkerrDT && $chkerrDC && $chkerrIT && $chkerrIC && $chkerrmem) {
             // All queries executed successfully
             print "<script>alert('The project have been updated.')</script>";
 
