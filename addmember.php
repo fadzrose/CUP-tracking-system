@@ -1,15 +1,23 @@
 
 <?php
+function generateRandomSalt($length = 32)
+{
+    return bin2hex(random_bytes($length / 2)); // Generates a random string of bytes and converts it to hexadecimal format
+}
+
+
 $xemail = $_POST['emailInput'];
 $xpass = $_POST['inputPassword6'];
-$hash = password_hash($plaintext_password,PASSWORD_DEFAULT); 
+$salt = generateRandomSalt(); // Replace this with your function to generate a random salt
+$hashedPassword = password_hash($xpass . $salt, PASSWORD_DEFAULT);
+// Store $hashedPassword and $salt in your database
 
 include "dbconnect.php";
 
 $dbc = mysqli_connect("localhost", "root", "", "cup tracking");
 
 
-$sqlin = "INSERT INTO `personnel` (`personnelId`, `name`, `position`, `email`, `password`, `phone`) VALUES ('','null','null','$xemail','$hash','null');";
+$sqlin = "INSERT INTO `personnel` (`personnelId`, `name`, `position`, `email`, `hashed_password`,`salt`, `phone`) VALUES ('','null','null','$xemail','$hashedPassword','$salt','null');";
 
 
 $chkerr = mysqli_query($dbc, $sqlin);

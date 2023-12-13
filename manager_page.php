@@ -1,3 +1,20 @@
+<?php
+session_start(); // Start the session
+
+// Check if the user clicks on the logout link
+if (isset($_GET['logout'])) {
+    // Unset all session variables
+    session_unset();
+
+    // Destroy the session
+    session_destroy();
+
+    // Redirect to a specific page after logout (optional)
+    print "<script>alert('You have been successfully logout. Thank you for using this website.')</script>";
+    print '<script>window.location.assign("loginpage.php");</script>';
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html>
 
@@ -202,11 +219,10 @@
 
         <a href="allprojectlist.php">Project</a>
         <a href="reportbyCategory.php">Report</a>
-        
+
         <!-- Divider -->
         <hr class="hr hr-blurry" />
-
-        <a href="#">Log out</a>
+        <a href="?logout=true">Log out</a> <!-- Add logout parameter -->
     </div>
 
     <br>

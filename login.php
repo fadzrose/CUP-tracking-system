@@ -5,26 +5,23 @@ $xpass = $_POST['inputPassword6'];
 
 include "dbconnect.php";
 
-//to check either a vlid customer and staff or not
-$chkps = "Select * from `personnel` where `email`=?";
-//$chkstaff = "Select * from `staff` where `staffid`='$xid';";
+// Prepare and execute a SELECT query
+$stmt = $dbc->prepare("SELECT hashed_password, salt, position FROM personnel WHERE email = ?");
+$stmt->bind_param("s", $xemail);
+$stmt->execute();
 
-$stmt = mysqli_prepare($dbc, $chkps);
-mysqli_stmt_bind_param($stmt, 's', $xemail);
-mysqli_stmt_execute($stmt);
 $result = mysqli_stmt_get_result($stmt);
-$ps = mysqli_fetch_array($result);
 
-if ($ps) {
-    
+if ($result && $ps = mysqli_fetch_assoc($result)) {
+    $hashedPasswordFromDB = $ps['hashed_password'];
+    $saltFromDB = $ps['salt'];
+
     $_SESSION['email'] = $xemail;
-    $hash = $ps['password']; // Retrieve hashed password from the database
 
-    $verify = password_verify($xpass, $hash); 
-  
-  // Print the result depending if they match 
-  if ($verify) {
-        // Fetching the position of the logged-in user from the database result
+    // Verify the password
+    $hashedPasswordInput = password_hash($xpass . $saltFromDB, PASSWORD_DEFAULT);
+
+    if (password_verify($xpass . $saltFromDB, $hashedPasswordFromDB)) {
         $xposition = $ps['position'];
 
         if ($xposition === 'Administrator') {
@@ -42,26 +39,21 @@ if ($ps) {
             echo '<script>alert("Incomplete details. Please sign up again and fill personnel details.");</script>';
             echo '<script>window.location.assign("signuppage.php");</script>';
             exit();
-             } 
-  } else {
-        /*echo '<script>alert("Incorrect password");</script>';
-        echo '<script>window.location.assign("loginpage.php");</script>';
-        exit();*/
-        
-        $hashFromDB = $ps['password']; // Retrieve hashed password from the database
+        }
+    } else {
+        $hashFromDB = $ps['hashed_password']; // Retrieve hashed password from the database
 
         // Output the hashes for debugging
-        echo "Hash from DB: " . $hashFromDB . "<br>";
-        echo "Hash of Entered Password: " . password_hash($xpass, PASSWORD_DEFAULT) . "<br>";
+        echo "Hash from DB: " . $hashedPasswordFromDB . "<br>";
+        echo "Hash of Entered Password: " . password_hash($xpass . $saltFromDB, PASSWORD_DEFAULT) . "<br>";
 
-            // Then perform password verification and redirection based on the result
-       
-    } 
-  
-
-
-    
+        // Password is incorrect
+        /*echo '<script>alert("Invalid password");</script>';
+        echo '<script>window.location.assign("loginpage.php");</script>';
+        exit();*/
+    }
 } else {
+    // User not found
     echo '<script>alert("Invalid user");</script>';
     echo '<script>window.location.assign("loginpage.php");</script>';
     exit();
