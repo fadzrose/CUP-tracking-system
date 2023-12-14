@@ -1,3 +1,20 @@
+<?php
+session_start(); // Start the session
+
+// Check if the user clicks on the logout link
+if (isset($_GET['logout'])) {
+    // Unset all session variables
+    session_unset();
+
+    // Destroy the session
+    session_destroy();
+
+    // Redirect to a specific page after logout (optional)
+    print "<script>alert('You have been successfully logout. Thank you for using this website.')</script>";
+    print '<script>window.location.assign("loginpage.php");</script>';
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html>
 
@@ -236,7 +253,6 @@
             justify-content: space-between;
             align-items: center;
         }
-
     </style>
 </head>
 
@@ -324,7 +340,7 @@
                             // Check if the current row's category is different from the previous row's category
                             if ($row['category'] !== $currentCategory) {
                                 // If it's a new category, display the category as the header
-                                echo '<tr><th colspan="7">' . $row['category'] . '</th></tr>';
+                                echo '<tr><th colspan="6" style="background-color: #FDE5E6; color: black;">' . $row['category'] . '</th></tr>';
                                 $currentCategory = $row['category']; // Update the current category
                             }
 

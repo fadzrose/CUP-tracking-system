@@ -125,7 +125,7 @@
                             <div class="col-auto">
                                 <label for="inputPassword6" align="left">Password : </label>
 
-                                <input type="password" id="inputPassword6" name="inputPassword6" class="form-control" placeholder="Enter password">
+                                <input type="password" id="inputPassword6" name="inputPassword6" class="form-control" placeholder="Enter password" required>
                             </div>
 
                             <div class="form-row">

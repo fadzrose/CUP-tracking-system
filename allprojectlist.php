@@ -1,3 +1,20 @@
+<?php
+session_start(); // Start the session
+
+// Check if the user clicks on the logout link
+if (isset($_GET['logout'])) {
+    // Unset all session variables
+    session_unset();
+
+    // Destroy the session
+    session_destroy();
+
+    // Redirect to a specific page after logout (optional)
+    print "<script>alert('You have been successfully logout. Thank you for using this website.')</script>";
+    print '<script>window.location.assign("loginpage.php");</script>';
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html>
 
@@ -178,6 +195,20 @@
                 font-size: 18px;
             }
         }
+
+        a {
+            color: black;
+            /* Gantikan dengan kod warna yang anda inginkan */
+            text-decoration: none;
+            /* Menghapuskan garisan di bawah hiperpautan */
+        }
+
+        /* Gaya hiperpautan apabila dihover */
+        a:hover {
+            text-decoration: underline;
+            /* Menambahkan garisan di bawah hiperpautan semasa hover */
+            /* Jika anda mahu warna berbeza semasa dihover, anda boleh menambahkan kod warna di sini */
+        }
     </style>
 </head>
 
@@ -258,7 +289,7 @@
                             echo
                             '<tr>
                             <td><img src="cover/' . $row['projectCover'] . '" width="74" height="105" </td>
-                                            <td>' . $row['title'] . '</td>
+                                            <td><a href="">' . $row['title'] . '</a></td>
                                             <td>' . $row['siri'] . '</td>
                                             <td>' . $row['category'] . '</td>
                                             <td>' . $row['projectSize'] . '</td>
@@ -268,16 +299,16 @@
 
                                             <td> 
                                             
-                                            <a href="editProject.php?id=' . $row['projectId'] . '" class="btn btn-warning">
+                                            <a href="editProject.php?id=' . $row['projectId'] . '" class="btn btn-warning" style="width : 50;">
                                                     
                                                 <span class="text">Edit</span>
-                                                </a>
-                                                <a href="updateprogress.php?id=' . $row['projectId'] . '" class="btn btn-info btn-icon-split">
+                                                </a><br>
+                                                <a href="updateprogress.php?id=' . $row['projectId'] . '" class="btn btn-info btn-icon-split" style="width : 50;">
                                                     
                                                 <span class="text">Update</span>
-                                                </a>
+                                                </a><br>
 
-                                                <a href="deleteProject.php?id=' . $row['projectId'] . '" class="btn btn-danger btn-icon-split">
+                                                <a href="deleteProject.php?id=' . $row['projectId'] . '" class="btn btn-danger btn-icon-split" style="width : 50;">
                                                     
                                                 <span class="text">Delete</span>
                                                 </a>
