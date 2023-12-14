@@ -339,6 +339,8 @@ if (isset($_GET['logout'])) {
                                 <th>Title</th>
                                 <th style="text-align: center">Cover</th>
                                 <th>Title</th>
+                                <th style="text-align: center">Cover</th>
+                                <th>Title</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -351,7 +353,7 @@ if (isset($_GET['logout'])) {
                             $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
                             // Loop through projects array two at a time to display cover and title in alternating columns
-                            for ($i = 0; $i < count($projects); $i += 2) {
+                            for ($i = 0; $i < count($projects); $i += 3) {
                                 echo '<tr>';
 
                                 // Display first project data
@@ -375,19 +377,42 @@ if (isset($_GET['logout'])) {
                                     // Display second project data
                                     echo '<td style="text-align: center">
                                         <div class="dropdown" >
-                                            <button  class="dropbtn"><img src="cover/' . $projects[$i]['projectCover'] . '" width="74" height="105"></button>
+                                            <button  class="dropbtn"><img src="cover/' . $projects[$i + 1]['projectCover'] . '" width="74" height="105"></button>
                                             
                                         </div></td>';
                                     echo '<td><div class="dropdown">
                                             <a href="" class="dropdown-link" onclick="toggleDropdown()" >' . $projects[$i + 1]['title'] . '</a>
                                             <div id="dropdownContent" class="dropdown-content">
 
-                                            <a href="editProject.php?id=' . $projects[$i]['projectId'] . '">Edit Project</a><br>
-                                            <a href="updateprogressDL.php?id=' . $projects[$i]['projectId'] . '">Update Progress</a><br>
-                                            <a href="deleteProject.php?id=' . $projects[$i]['projectId'] . '">Delete</a>
+                                            <a href="editProject.php?id=' . $projects[$i + 1]['projectId'] . '">Edit Project</a><br>
+                                            <a href="updateprogressDL.php?id=' . $projects[$i + 1]['projectId'] . '">Update Progress</a><br>
+                                            <a href="deleteProject.php?id=' . $projects[$i + 1]['projectId'] . '">Delete</a>
                                             
                                             </div>
                                         </div></td>';
+
+                                    if (isset($projects[$i + 2])) {
+                                        // Display second project data
+                                        echo '<td style="text-align: center">
+                                        <div class="dropdown" >
+                                            <button  class="dropbtn"><img src="cover/' . $projects[$i + 2]['projectCover'] . '" width="74" height="105"></button>
+                                            
+                                        </div></td>';
+                                        echo '<td><div class="dropdown">
+                                            <a href="" class="dropdown-link" onclick="toggleDropdown()" >' . $projects[$i + 2]['title'] . '</a>
+                                            <div id="dropdownContent" class="dropdown-content">
+
+                                            <a href="editProject.php?id=' . $projects[$i + 2]['projectId'] . '">Edit Project</a><br>
+                                            <a href="updateprogressDL.php?id=' . $projects[$i + 2]['projectId'] . '">Update Progress</a><br>
+                                            <a href="deleteProject.php?id=' . $projects[$i + 2]['projectId'] . '">Delete</a>
+                                            
+                                            </div>
+                                        </div></td>';
+                                    } else {
+                                        // If no second project exists, display empty columns
+                                        echo '<td></td>';
+                                        echo '<td></td>';
+                                    }
                                 } else {
                                     // If no second project exists, display empty columns
                                     echo '<td></td>';
