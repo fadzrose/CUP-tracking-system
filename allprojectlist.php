@@ -196,7 +196,7 @@ if (isset($_GET['logout'])) {
             }
         }
 
-        a {
+        table a {
             color: black;
             /* Gantikan dengan kod warna yang anda inginkan */
             text-decoration: none;
@@ -204,10 +204,74 @@ if (isset($_GET['logout'])) {
         }
 
         /* Gaya hiperpautan apabila dihover */
-        a:hover {
+        table a:hover {
             text-decoration: underline;
             /* Menambahkan garisan di bawah hiperpautan semasa hover */
             /* Jika anda mahu warna berbeza semasa dihover, anda boleh menambahkan kod warna di sini */
+        }
+
+        /* Style the dropdown button */
+        .dropbtn {
+            background-color: #ff8fab;
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 200px;
+
+        }
+
+        /* Dropdown button on hover & focus */
+        .dropbtn:hover,
+        .dropbtn:focus {
+            background-color: pink;
+        }
+
+        /* Style the dropdown content */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            z-index: 1000;
+            /* Set a higher z-index */
+        }
+
+
+        /* Links inside the dropdown */
+        /* Style for dropdown anchor tags */
+        .dropdown-link {
+            size: 11;
+            color: black;
+            padding: 5px 5px;
+            text-decoration: none;
+            display: block;
+            border-radius: 4px;
+        }
+
+        /* Style for dropdown anchor tags on hover */
+        .dropdown-content a.dropdown-link:hover {
+            background-color: #f1f1f1;
+            border-radius: 4px;
+            /* Add other specific styles for dropdown links on hover */
+        }
+
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+            z-index: 1000;
+            /* Set a higher z-index */
+        }
+
+        /* Show the dropdown menu when the button is focused */
+        .dropdown:focus-within .dropdown-content {
+            display: block;
+            z-index: 1000;
+            /* Set a higher z-index */
         }
     </style>
 </head>
@@ -268,13 +332,7 @@ if (isset($_GET['logout'])) {
                             <tr>
                                 <th>Cover</th>
                                 <th>Title</th>
-                                <th>Series</th>
-                                <th>Category</th>
-                                <th>Size</th>
-                                <th>Total Pages</th>
-                                <th>Type of Design</th>
-                                <th>Finishing</th>
-                                <th>Action</th>
+
 
                             </tr>
 
@@ -287,34 +345,21 @@ if (isset($_GET['logout'])) {
                         $result = mysqli_query($dbc, $sql);
                         while ($row = mysqli_fetch_assoc($result)) {
                             echo
-                            '<tr>
-                            <td><img src="cover/' . $row['projectCover'] . '" width="74" height="105" </td>
-                                            <td><a href="">' . $row['title'] . '</a></td>
-                                            <td>' . $row['siri'] . '</td>
-                                            <td>' . $row['category'] . '</td>
-                                            <td>' . $row['projectSize'] . '</td>
-                                            <td>' . $row['totalPages'] . '</td>
-                                            <td>' . $row['typeOfDesign'] . '</td>
-                                            <td>' . $row['typeOfFinishing'] . '</td>
-
-                                            <td> 
+                            '<tr><td>
+                                    <img src="cover/' . $row['projectCover'] . '" width="74" height="105">
+                                </td>
+                            <td><div class="dropdown">
+                                    <a href="#" class="dropdown-link" onclick="toggleDropdown(' . $row['projectId'] . ')">' . $row['title'] . '</a>
+                                    <div id="dropdownContent_' . $row['projectId'] . '" class="dropdown-content">
+                                        <a href="editProject.php?id=' . $row['projectId'] . '">Edit Project</a><br>
+                                        <a href="updateprogress.php?id=' . $row['projectId'] . '">Update Progress</a><br>
+                                         <a href="deleteProject.php?id=' . $row['projectId'] . '">Delete</a>
+                        
+                                     </div>
+                                </div></td>
                                             
-                                            <a href="editProject.php?id=' . $row['projectId'] . '" class="btn btn-warning" style="width : 50;">
-                                                    
-                                                <span class="text">Edit</span>
-                                                </a><br>
-                                                <a href="updateprogress.php?id=' . $row['projectId'] . '" class="btn btn-info btn-icon-split" style="width : 50;">
-                                                    
-                                                <span class="text">Update</span>
-                                                </a><br>
-
-                                                <a href="deleteProject.php?id=' . $row['projectId'] . '" class="btn btn-danger btn-icon-split" style="width : 50;">
-                                                    
-                                                <span class="text">Delete</span>
-                                                </a>
-
-                                            </td>
-                                        </tr>';
+                                            
+                             </tr>';
                         }
                         ?>
                     </table>
@@ -406,6 +451,20 @@ if (isset($_GET['logout'])) {
             document.getElementById("main").style.marginLeft = "5%";
             document.getElementById("footer").style.marginLeft = "0";
             document.getElementById("header").style.marginLeft = "0";
+        }
+
+        function toggleDropdown(projectId) {
+            var dropdownContent = document.getElementById("dropdownContent_" + projectId);
+            if (dropdownContent.style.display === "block") {
+                dropdownContent.style.display = "none";
+            } else {
+                // Hide all dropdowns before displaying the clicked one
+                var allDropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < allDropdowns.length; i++) {
+                    allDropdowns[i].style.display = "none";
+                }
+                dropdownContent.style.display = "block";
+            }
         }
     </script>
 
