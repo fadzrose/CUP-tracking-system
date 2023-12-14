@@ -195,16 +195,16 @@
         <br>
         <!-- Divider -->
         <hr class="hr hr-blurry" />
-        <a href="#">Dashboard</a>
+        <a href="manager_page.php">Dashboard</a>
         <!-- Divider -->
         <hr class="hr hr-blurry" />
 
-        <a href="#">Project</a>
-        <a href="#">Report</a>
+        <a href="allprojectlist.php">Project</a>
+        <a href="reportbyCategory.php">Report</a>
+
         <!-- Divider -->
         <hr class="hr hr-blurry" />
-
-        <a href="#">Log out</a>
+        <a href="?logout=true">Log out</a> <!-- Add logout parameter -->
     </div>
     <br>
     <div id="main" class="card">

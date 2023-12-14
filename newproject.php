@@ -112,7 +112,7 @@ $qpersonnels = query("SELECT * FROM personnel");
             border-radius: 4px;
             box-sizing: border-box;
         }
-        
+
 
         /* Styles for the select element */
         .css-dropdown select {
@@ -378,8 +378,8 @@ $qpersonnels = query("SELECT * FROM personnel");
                             </select>
                         </td>
                         <td><label for="proofing">Editor (Proofing)</label>
-                            <select class="form-control" id="proofing" name="proofing" >
-                                <option value="0" selected disabled>Please select the editor</option>
+                            <select class="form-control" id="proofing" name="proofing" required>
+                                <option value="" selected disabled>Please select the editor</option>
                                 <?php
                                 foreach ($qpersonnels as $personnel) :
                                     if ($personnel["position"] == "Editor") {
@@ -406,8 +406,8 @@ $qpersonnels = query("SELECT * FROM personnel");
                             </select>
                         </td>
                         <td><label for="designerCover">Graphic Designer (Cover)</label>
-                            <select class="form-control" id="designerCover" name="designerCover">
-                                <option value="0" selected disabled>Please select the designer</option>
+                            <select class="form-control" id="designerCover" name="designerCover" required>
+                                <option value="" selected disabled>Please select the designer</option>
                                 <?php
                                 foreach ($qpersonnels as $personnel) :
                                     if ($personnel["position"] == "Graphic Designer") {
@@ -434,8 +434,8 @@ $qpersonnels = query("SELECT * FROM personnel");
                             </select>
                         </td>
                         <td><label for="IlusCover">Illustrator (Cover)</label>
-                            <select class="form-control" id="IlusCover" name="IlusCover">
-                                <option value="0" selected disabled>Please select the illustrator</option>
+                            <select class="form-control" id="IlusCover" name="IlusCover" required>
+                                <option value="" selected disabled>Please select the illustrator</option>
                                 <?php
                                 foreach ($qpersonnels as $personnel) :
                                     if ($personnel["position"] == "Illustrator") {

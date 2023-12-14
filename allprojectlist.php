@@ -204,10 +204,10 @@
 
         <a href="allprojectlist.php">Project</a>
         <a href="reportbyCategory.php">Report</a>
+
         <!-- Divider -->
         <hr class="hr hr-blurry" />
-
-        <a href="#">Log out</a>
+        <a href="?logout=true">Log out</a> <!-- Add logout parameter -->
     </div>
     <br>
     <div id="main" class="card">
@@ -289,21 +289,21 @@
                     </table>
 
                     <hr class="hr hr-blurry" />
-                    
-                        <?php
-                        include "dbconnect.php";
-                        $sql = "SELECT project.*, design_layout.* 
+
+                    <?php
+                    include "dbconnect.php";
+                    $sql = "SELECT project.*, design_layout.* 
                                 FROM project 
                                 LEFT JOIN design_layout ON project.projectId = design_layout.projectId
                                 WHERE design_layout.projectId IS NULL OR design_layout.projectCover IS NULL"; // Fetch projects with incomplete details
-                        $result = mysqli_query($dbc, $sql);
+                    $result = mysqli_query($dbc, $sql);
 
-                        $displayHeader = true; // Variable to control header display
+                    $displayHeader = true; // Variable to control header display
 
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            if ($displayHeader) {
-                                // Display the header only if it's the first incomplete project
-                                echo '
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        if ($displayHeader) {
+                            // Display the header only if it's the first incomplete project
+                            echo '
             <div class="card-header py-3">
                 <div class="form-row justify-content-between align-items-center">
                     <h5 class="m-0 font-weight-bold text-dark">Incomplete Projects Details</h5>
@@ -324,11 +324,11 @@
                     </tr>
                 </thead>
         ';
-                                $displayHeader = false; // Set to false so that header won't be displayed again
-                            }
+                            $displayHeader = false; // Set to false so that header won't be displayed again
+                        }
 
-                            // Display details of incomplete projects
-                            echo '
+                        // Display details of incomplete projects
+                        echo '
         <tr>
             <td><img src="cover/' . $row['projectCover'] . '" width="74" height="105" </td>
             <td>' . $row['title'] . '</td>
@@ -345,9 +345,10 @@
             </td>
         </tr>
     ';
-                        }
-                        echo '</table>'; // Close the table outside the loop
-                ?></div>
+                    }
+                    echo '</table>'; // Close the table outside the loop
+                    ?>
+                </div>
             </div>
         </div>
     </div>
