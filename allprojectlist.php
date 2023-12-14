@@ -332,37 +332,44 @@ if (isset($_GET['logout'])) {
                             <tr>
                                 <th>Cover</th>
                                 <th>Title</th>
-
-
+                                <th>Cover</th>
+                                <th>Title</th>
                             </tr>
-
                         </thead>
-                        <?php
-                        include "dbconnect.php";
-                        $sql = "SELECT project.*, design_layout.* 
-                                FROM project 
-                                INNER JOIN design_layout ON project.projectId = design_layout.projectId"; // Modify the join condition based on your actual table structure
-                        $result = mysqli_query($dbc, $sql);
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo
-                            '<tr><td>
-                                    <img src="cover/' . $row['projectCover'] . '" width="74" height="105">
-                                </td>
-                            <td><div class="dropdown">
-                                    <a href="#" class="dropdown-link" onclick="toggleDropdown(' . $row['projectId'] . ')">' . $row['title'] . '</a>
-                                    <div id="dropdownContent_' . $row['projectId'] . '" class="dropdown-content">
-                                        <a href="editProject.php?id=' . $row['projectId'] . '">Edit Project</a><br>
-                                        <a href="updateprogress.php?id=' . $row['projectId'] . '">Update Progress</a><br>
-                                         <a href="deleteProject.php?id=' . $row['projectId'] . '">Delete</a>
-                        
-                                     </div>
-                                </div></td>
-                                            
-                                            
-                             </tr>';
-                        }
-                        ?>
+                        <tbody>
+                            <?php
+                            include "dbconnect.php";
+                            $sql = "SELECT project.*, design_layout.* 
+                                    FROM project 
+                                    INNER JOIN design_layout ON project.projectId = design_layout.projectId"; // Modify the join condition based on your actual table structure
+                            $result = mysqli_query($dbc, $sql);
+                            $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+                            // Loop through projects array two at a time to display cover and title in alternating columns
+                            for ($i = 0; $i < count($projects); $i += 2) {
+                                echo '<tr>';
+
+                                // Display first project data
+                                echo '<td><img src="cover/' . $projects[$i]['projectCover'] . '" width="74" height="105"></td>';
+                                echo '<td>' . $projects[$i]['title'] . '</td>';
+
+                                // Check if the second project exists
+                                if (isset($projects[$i + 1])) {
+                                    // Display second project data
+                                    echo '<td><img src="cover/' . $projects[$i + 1]['projectCover'] . '" width="74" height="105"></td>';
+                                    echo '<td>' . $projects[$i + 1]['title'] . '</td>';
+                                } else {
+                                    // If no second project exists, display empty columns
+                                    echo '<td></td>';
+                                    echo '<td></td>';
+                                }
+
+                                echo '</tr>';
+                            }
+                            ?>
+                        </tbody>
                     </table>
+
 
                     <hr class="hr hr-blurry" />
 
