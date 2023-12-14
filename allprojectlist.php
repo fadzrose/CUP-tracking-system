@@ -212,15 +212,19 @@ if (isset($_GET['logout'])) {
 
         /* Style the dropdown button */
         .dropbtn {
-            background-color: #ff8fab;
+            background-color: pink;
             color: white;
             padding: 12px;
             font-size: 16px;
             border: none;
             cursor: pointer;
             border-radius: 4px;
-            width: 200px;
+            width: 100px;
+            height: 110;
+        }
 
+        .dropbtn img {
+            align-items: center;
         }
 
         /* Dropdown button on hover & focus */
@@ -298,6 +302,7 @@ if (isset($_GET['logout'])) {
         <hr class="hr hr-blurry" />
 
         <a href="allprojectlist.php">Project</a>
+        <a href="#">Progress</a>
         <a href="reportbyCategory.php">Report</a>
 
         <!-- Divider -->
@@ -330,9 +335,9 @@ if (isset($_GET['logout'])) {
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                         <thead>
                             <tr>
-                                <th>Cover</th>
+                                <th style="text-align: center">Cover</th>
                                 <th>Title</th>
-                                <th>Cover</th>
+                                <th style="text-align: center">Cover</th>
                                 <th>Title</th>
                             </tr>
                         </thead>
@@ -350,14 +355,39 @@ if (isset($_GET['logout'])) {
                                 echo '<tr>';
 
                                 // Display first project data
-                                echo '<td><img src="cover/' . $projects[$i]['projectCover'] . '" width="74" height="105"></td>';
-                                echo '<td>' . $projects[$i]['title'] . '</td>';
+                                echo '<td style="text-align: center">
+                                        <div class="dropdown" >
+                                            <button  class="dropbtn"><img src="cover/' . $projects[$i]['projectCover'] . '" width="74" height="105"></button>
+                                            
+                                        </div></td>';
+                                echo '<td><div class="dropdown">
+                                            <a href="" class="dropdown-link" onclick="toggleDropdown()" >' . $projects[$i]['title'] . '</a>
+                                            <div id="dropdownContent" class="dropdown-content">
 
+                                            <a href="editProject.php?id=' . $projects[$i]['projectId'] . '">Edit Project</a><br>
+                                            <a href="updateprogressDL.php?id=' . $projects[$i]['projectId'] . '">Update Progress</a><br>
+                                            <a href="deleteProject.php?id=' . $projects[$i]['projectId'] . '">Delete</a>
+                                            
+                                            </div>
+                                        </div></td>';
                                 // Check if the second project exists
                                 if (isset($projects[$i + 1])) {
                                     // Display second project data
-                                    echo '<td><img src="cover/' . $projects[$i + 1]['projectCover'] . '" width="74" height="105"></td>';
-                                    echo '<td>' . $projects[$i + 1]['title'] . '</td>';
+                                    echo '<td style="text-align: center">
+                                        <div class="dropdown" >
+                                            <button  class="dropbtn"><img src="cover/' . $projects[$i]['projectCover'] . '" width="74" height="105"></button>
+                                            
+                                        </div></td>';
+                                    echo '<td><div class="dropdown">
+                                            <a href="" class="dropdown-link" onclick="toggleDropdown()" >' . $projects[$i + 1]['title'] . '</a>
+                                            <div id="dropdownContent" class="dropdown-content">
+
+                                            <a href="editProject.php?id=' . $projects[$i]['projectId'] . '">Edit Project</a><br>
+                                            <a href="updateprogressDL.php?id=' . $projects[$i]['projectId'] . '">Update Progress</a><br>
+                                            <a href="deleteProject.php?id=' . $projects[$i]['projectId'] . '">Delete</a>
+                                            
+                                            </div>
+                                        </div></td>';
                                 } else {
                                     // If no second project exists, display empty columns
                                     echo '<td></td>';
