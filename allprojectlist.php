@@ -55,7 +55,7 @@ if (isset($_GET['logout'])) {
         .header {
             padding: 10px;
             text-align: center;
-            background: #ff8fab;
+            background: #FFB7C3;
             color: black;
             font-size: 30px;
 
@@ -66,7 +66,7 @@ if (isset($_GET['logout'])) {
             left: 0;
             bottom: 0;
             width: 100%;
-            background-color: #ff8fab;
+            background-color: #FFB7C3;
             color: white;
             text-align: center;
         }
@@ -135,6 +135,7 @@ if (isset($_GET['logout'])) {
             /* Place content 60px from the top */
             transition: 0.5s;
             /* 0.5 second transition effect to slide in the sidebar */
+            box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.2);
         }
 
         /* The sidebar links */
@@ -167,9 +168,11 @@ if (isset($_GET['logout'])) {
             font-size: 20px;
             cursor: pointer;
             background-color: pink;
-            color: whitesmoke;
+            color: black;
             padding: 10px 15px;
             border: none;
+            box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
         }
 
         .openbtn:hover {
@@ -210,18 +213,6 @@ if (isset($_GET['logout'])) {
             /* Jika anda mahu warna berbeza semasa dihover, anda boleh menambahkan kod warna di sini */
         }
 
-        /* Style the dropdown button */
-        .dropbtn {
-            background-color: #ff8fab;
-            color: white;
-            padding: 12px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-            border-radius: 4px;
-            width: 200px;
-            height: 110;
-        }
 
         .dynamic-width {
             display: inline-block;
@@ -242,10 +233,23 @@ if (isset($_GET['logout'])) {
             border: 5px solid #555;
             border-radius: 4px;
             background-color: #ffe5ec;
-            border-color: pink;
+            border-color: #ff8fab;
         }
 
-        /* Dropdown button on hover & focus */
+        /* Style the dropdown button */
+        .dropbtn {
+            background-color: #ff8fab;
+            color: white;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+            width: 200px;
+            height: 110;
+        }
+
+
         .dropbtn:hover,
         .dropbtn:focus {
             background-color: pink;
@@ -275,7 +279,6 @@ if (isset($_GET['logout'])) {
             border-radius: 4px;
         }
 
-        /* Style for dropdown anchor tags on hover */
         .dropdown-content a.dropdown-link:hover {
             background-color: #f1f1f1;
             border-radius: 4px;
@@ -297,12 +300,12 @@ if (isset($_GET['logout'])) {
         }
 
         /* CSS Styles for Progress Bar */
-        .progress-bar {
-            width: 100%;
+        .progress-barX {
+            width: 200px;
             /* Adjust width as needed */
-            height: 30px;
+            height: 15px;
             /* Adjust height as needed */
-            background-color: #ffe5ec;
+            background-color: #4B8E92;
             /* Background color of the progress bar container */
             border-radius: 5px;
             /* Rounded corners */
@@ -310,9 +313,9 @@ if (isset($_GET['logout'])) {
             /* Adjust spacing as needed */
         }
 
-        .progress {
-            height: 90%;
-            background-color: #ff8fab;
+        .progressX {
+            height: 100%;
+            background-color: #79ECE4;
             /* Color of the progress bar */
             border-radius: 5px;
             /* Rounded corners */
@@ -351,7 +354,7 @@ if (isset($_GET['logout'])) {
         <hr class="hr hr-blurry" />
 
         <a href="allprojectlist.php">Project</a>
-        <a href="#">Progress</a>
+
         <a href="reportbyCategory.php">Report</a>
 
         <!-- Divider -->
@@ -379,13 +382,14 @@ if (isset($_GET['logout'])) {
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        
+
                         <tbody>
                             <?php
                             include "dbconnect.php";
                             $sql = "SELECT project.*, design_layout.* 
                                     FROM project 
-                                    INNER JOIN design_layout ON project.projectId = design_layout.projectId"; // Modify the join condition based on your actual table structure
+                                    INNER JOIN design_layout ON project.projectId = design_layout.projectId
+                                    ORDER BY progressPercentage"; // Modify the join condition based on your actual table structure
                             $result = mysqli_query($dbc, $sql);
                             $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
@@ -400,6 +404,7 @@ if (isset($_GET['logout'])) {
                                 '<td style="text-align: center">
                                         <img src="cover/' . $projects[$i]['projectCover'] . '" width="74" height="105"></td>';
                                 echo '<td>Siri ' . $projects[$i]['siri'] . ' : 
+                                        
                                         <div class="dropdown">
                                             <div class="dynamic-width" id="dynamicWidthElement" onclick="toggleDropdown()">
                                                 ' . $projects[$i]['title'] . '
@@ -411,9 +416,11 @@ if (isset($_GET['logout'])) {
                                             <a href="deleteProject.php?id=' . $projects[$i]['projectId'] . '">Delete</a>
                                             
                                             </div>
-                                        </div>
-                                        <div class="progress-bar">
-                                            <div class="progress" style="width: ' . $projects[$i]['progressPercentage'] . '%;"></div>
+                                        </div>        
+
+                                        
+                                <div class="progress-barX">
+                                            <div class="progressX" style="width: ' . $projects[$i]['progressPercentage'] . '%;"></div>
                                         </div>
                                         ' . $projects[$i]['progressPercentage'] . '%</td>';
                                 // Check if the second project exists
@@ -430,12 +437,13 @@ if (isset($_GET['logout'])) {
 
                                             <a href="editProject.php?id=' . $projects[$i + 1]['projectId'] . '">Edit Project</a><br>
                                             <a href="updateprogressDL.php?id=' . $projects[$i + 1]['projectId'] . '">Update Progress</a><br>
-                                            <a href="deleteProject.php?id=' . $projects[$i + 1]['projectId'] . '">Delete</a>
+                                            <a href="deleteProject.php?id=' . $projects[$i + 1]['projectId'] .
+                                        '">Delete</a>
                                             
                                             </div>
                                         </div>
-                                        <div class="progress-bar">
-                                            <div class="progress" style="width: ' . $projects[$i + 1]['progressPercentage'] . '%;"></div>
+                                        <div class="progress-barX">
+                                            <div class="progressX" style="width: ' . $projects[$i + 1]['progressPercentage'] . '%;"></div>
                                         </div>
                                         ' . $projects[$i + 1]['progressPercentage'] . '%</td>';
 
@@ -456,8 +464,8 @@ if (isset($_GET['logout'])) {
                                             
                                             </div>
                                         </div>
-                                        <div class="progress-bar">
-                                            <div class="progress" style="width: ' . $projects[$i + 2]['progressPercentage'] . '%;"></div>
+                                        <div class="progress-barX">
+                                            <div class="progressX" style="width: ' . $projects[$i + 2]['progressPercentage'] . '%;"></div>
                                         </div>
                                         ' . $projects[$i + 2]['progressPercentage'] . '%</td>';
                                     } else {
@@ -566,20 +574,6 @@ if (isset($_GET['logout'])) {
             document.getElementById("main").style.marginLeft = "5%";
             document.getElementById("footer").style.marginLeft = "0";
             document.getElementById("header").style.marginLeft = "0";
-        }
-
-        function toggleDropdown(projectId) {
-            var dropdownContent = document.getElementById("dropdownContent_" + projectId);
-            if (dropdownContent.style.display === "block") {
-                dropdownContent.style.display = "none";
-            } else {
-                // Hide all dropdowns before displaying the clicked one
-                var allDropdowns = document.getElementsByClassName("dropdown-content");
-                for (var i = 0; i < allDropdowns.length; i++) {
-                    allDropdowns[i].style.display = "none";
-                }
-                dropdownContent.style.display = "block";
-            }
         }
     </script>
 

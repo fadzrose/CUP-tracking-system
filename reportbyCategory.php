@@ -295,7 +295,7 @@ if (isset($_GET['logout'])) {
                 <div id="dropdownContent" class="dropdown-content">
 
                     <a href="reportbyCategory.php">sort by Category</a>
-                    <a href="#">sort by Progress</a>
+                    
                     <a href="#">sort by Editor</a>
                     <a href="#">sort by Graphic Designer</a>
                     <a href="#">sort by Illustrator</a>
