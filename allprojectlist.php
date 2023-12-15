@@ -223,8 +223,26 @@ if (isset($_GET['logout'])) {
             height: 110;
         }
 
-        .dropbtn img {
+        .dynamic-width {
+            display: inline-block;
+            /* Set initial width or use min-width to ensure a minimum width */
+            min-width: 100px;
+            /* Optionally, you can set a max-width to prevent it from becoming too wide */
+            max-width: 100%;
+            /* Other styles as needed */
+            background-color: whitesmoke;
+            border-radius: 4px;
+            padding: 2px;
+            cursor: pointer;
+        }
+
+
+        img {
             align-items: center;
+            border: 5px solid #555;
+            border-radius: 4px;
+            background-color: #ffe5ec;
+            border-color: pink;
         }
 
         /* Dropdown button on hover & focus */
@@ -357,13 +375,13 @@ if (isset($_GET['logout'])) {
                                 echo '<tr>';
 
                                 // Display first project data
-                                echo '<td style="text-align: center">
-                                        <div class="dropdown" >
-                                            <button  class="dropbtn"><img src="cover/' . $projects[$i]['projectCover'] . '" width="74" height="105"></button>
-                                            
-                                        </div></td>';
-                                echo '<td><div class="dropdown">
-                                            <a href="" class="dropdown-link" onclick="toggleDropdown()" >' . $projects[$i]['title'] . '</a>
+                                echo
+                                '<td style="text-align: center">
+                                        <img src="cover/' . $projects[$i]['projectCover'] . '" width="74" height="105"></td>';
+                                echo '<td>Siri ' . $projects[$i]['siri'] . ' : <div class="dropdown">
+                                            <div class="dynamic-width" id="dynamicWidthElement" onclick="toggleDropdown()">
+                                                ' . $projects[$i]['title'] . '
+                                            </div>
                                             <div id="dropdownContent" class="dropdown-content">
 
                                             <a href="editProject.php?id=' . $projects[$i]['projectId'] . '">Edit Project</a><br>
@@ -375,13 +393,13 @@ if (isset($_GET['logout'])) {
                                 // Check if the second project exists
                                 if (isset($projects[$i + 1])) {
                                     // Display second project data
-                                    echo '<td style="text-align: center">
-                                        <div class="dropdown" >
-                                            <button  class="dropbtn"><img src="cover/' . $projects[$i + 1]['projectCover'] . '" width="74" height="105"></button>
-                                            
-                                        </div></td>';
-                                    echo '<td><div class="dropdown">
-                                            <a href="" class="dropdown-link" onclick="toggleDropdown()" >' . $projects[$i + 1]['title'] . '</a>
+                                    echo
+                                    '<td style="text-align: center">
+                                        <img src="cover/' . $projects[$i + 1]['projectCover'] . '" width="74" height="105"></td>';
+                                    echo '<td>Siri ' . $projects[$i + 1]['siri'] . ' : <div class="dropdown">
+                                            <div class="dynamic-width" id="dynamicWidthElement" onclick="toggleDropdown()">
+                                                ' . $projects[$i + 1]['title'] . '
+                                            </div>
                                             <div id="dropdownContent" class="dropdown-content">
 
                                             <a href="editProject.php?id=' . $projects[$i + 1]['projectId'] . '">Edit Project</a><br>
@@ -393,13 +411,13 @@ if (isset($_GET['logout'])) {
 
                                     if (isset($projects[$i + 2])) {
                                         // Display second project data
-                                        echo '<td style="text-align: center">
-                                        <div class="dropdown" >
-                                            <button  class="dropbtn"><img src="cover/' . $projects[$i + 2]['projectCover'] . '" width="74" height="105"></button>
-                                            
-                                        </div></td>';
-                                        echo '<td><div class="dropdown">
-                                            <a href="" class="dropdown-link" onclick="toggleDropdown()" >' . $projects[$i + 2]['title'] . '</a>
+                                        echo
+                                        '<td style="text-align: center">
+                                        <img src="cover/' . $projects[$i + 2]['projectCover'] . '" width="74" height="105"></td>';
+                                        echo '<td>Siri ' . $projects[$i + 2]['siri'] . ' : <div class="dropdown">
+                                            <div class="dynamic-width" id="dynamicWidthElement" onclick="toggleDropdown()">
+                                                ' . $projects[$i + 2]['title'] . '
+                                            </div>
                                             <div id="dropdownContent" class="dropdown-content">
 
                                             <a href="editProject.php?id=' . $projects[$i + 2]['projectId'] . '">Edit Project</a><br>

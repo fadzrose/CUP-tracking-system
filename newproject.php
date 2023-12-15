@@ -310,7 +310,7 @@ $qpersonnels = query("SELECT * FROM personnel");
                             </select>
                         </td>
                         <td><label for="totalPages">Total Pages</label>
-                            <input type="number" class="form-control" id="totalPages" name="totalPages" min="1" />
+                            <input type="number" class="form-control" id="totalPages" name="totalPages" min="1" placeholder="1"/>
                         </td>
                     </tr>
                     <tr>
