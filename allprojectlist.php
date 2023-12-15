@@ -212,14 +212,14 @@ if (isset($_GET['logout'])) {
 
         /* Style the dropdown button */
         .dropbtn {
-            background-color: pink;
+            background-color: #ff8fab;
             color: white;
             padding: 12px;
             font-size: 16px;
             border: none;
             cursor: pointer;
             border-radius: 4px;
-            width: 100px;
+            width: 200px;
             height: 110;
         }
 
@@ -295,6 +295,37 @@ if (isset($_GET['logout'])) {
             z-index: 1000;
             /* Set a higher z-index */
         }
+
+        /* CSS Styles for Progress Bar */
+        .progress-bar {
+            width: 100%;
+            /* Adjust width as needed */
+            height: 30px;
+            /* Adjust height as needed */
+            background-color: #ffe5ec;
+            /* Background color of the progress bar container */
+            border-radius: 5px;
+            /* Rounded corners */
+            margin-top: 5px;
+            /* Adjust spacing as needed */
+        }
+
+        .progress {
+            height: 90%;
+            background-color: #ff8fab;
+            /* Color of the progress bar */
+            border-radius: 5px;
+            /* Rounded corners */
+            transition: width 0.5s ease-in-out;
+            /* Smooth transition effect */
+        }
+
+        .title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 200;
+        }
     </style>
 </head>
 
@@ -329,38 +360,26 @@ if (isset($_GET['logout'])) {
     </div>
     <br>
     <div id="main" class="card">
-        <div class="form-row">
-            <table width="100%">
-                <tr>
-                    <th>
-                        <h2>Project List</h2>
-                    </th>
-                    <th style="text-align: right;"><a href="newproject.php" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-download fa-sm text-white-50"></i>Add New Project</a></th>
-                </tr>
-            </table>
+        <div class="title">
+            <h2 align="left">All Projects List</h2>
+            <div class="dropdown" align="right">
 
 
-        </div>
+                <button href="newproject.php" class="dropbtn">add new project</button>
+
+            </div>
+        </div><br>
         <div>
             <div class="card-header py-3">
                 <div class="form-row justify-content-between align-items-center">
-                    <h5 class="m-0 font-weight-bold text-dark">Details of Projects</h5>
+                    <h5 class="m-0 font-weight-bold text-dark">Progress of the Projects</h5>
 
                 </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                        <thead>
-                            <tr>
-                                <th style="text-align: center">Cover</th>
-                                <th>Title</th>
-                                <th style="text-align: center">Cover</th>
-                                <th>Title</th>
-                                <th style="text-align: center">Cover</th>
-                                <th>Title</th>
-                            </tr>
-                        </thead>
+                        
                         <tbody>
                             <?php
                             include "dbconnect.php";
@@ -370,7 +389,7 @@ if (isset($_GET['logout'])) {
                             $result = mysqli_query($dbc, $sql);
                             $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-                            
+
 
                             // Loop through projects array two at a time to display cover and title in alternating columns
                             for ($i = 0; $i < count($projects); $i += 3) {
@@ -380,7 +399,8 @@ if (isset($_GET['logout'])) {
                                 echo
                                 '<td style="text-align: center">
                                         <img src="cover/' . $projects[$i]['projectCover'] . '" width="74" height="105"></td>';
-                                echo '<td>Siri ' . $projects[$i]['siri'] . ' : <div class="dropdown">
+                                echo '<td>Siri ' . $projects[$i]['siri'] . ' : 
+                                        <div class="dropdown">
                                             <div class="dynamic-width" id="dynamicWidthElement" onclick="toggleDropdown()">
                                                 ' . $projects[$i]['title'] . '
                                             </div>
@@ -391,6 +411,9 @@ if (isset($_GET['logout'])) {
                                             <a href="deleteProject.php?id=' . $projects[$i]['projectId'] . '">Delete</a>
                                             
                                             </div>
+                                        </div>
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: ' . $projects[$i]['progressPercentage'] . '%;"></div>
                                         </div>
                                         ' . $projects[$i]['progressPercentage'] . '%</td>';
                                 // Check if the second project exists
@@ -411,7 +434,10 @@ if (isset($_GET['logout'])) {
                                             
                                             </div>
                                         </div>
-                                        ' . $projects[$i+1]['progressPercentage'] . '%</td>';
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: ' . $projects[$i + 1]['progressPercentage'] . '%;"></div>
+                                        </div>
+                                        ' . $projects[$i + 1]['progressPercentage'] . '%</td>';
 
                                     if (isset($projects[$i + 2])) {
                                         // Display second project data
@@ -430,7 +456,10 @@ if (isset($_GET['logout'])) {
                                             
                                             </div>
                                         </div>
-                                        ' . $projects[$i+2]['progressPercentage'] . '%</td>';
+                                        <div class="progress-bar">
+                                            <div class="progress" style="width: ' . $projects[$i + 2]['progressPercentage'] . '%;"></div>
+                                        </div>
+                                        ' . $projects[$i + 2]['progressPercentage'] . '%</td>';
                                     } else {
                                         // If no second project exists, display empty columns
                                         echo '<td></td>';
@@ -438,6 +467,7 @@ if (isset($_GET['logout'])) {
                                     }
                                 } else {
                                     // If no second project exists, display empty columns
+                                    echo '<td></td>';
                                     echo '<td></td>';
                                     echo '<td></td>';
                                 }
