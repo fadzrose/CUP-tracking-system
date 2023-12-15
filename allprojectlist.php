@@ -370,6 +370,8 @@ if (isset($_GET['logout'])) {
                             $result = mysqli_query($dbc, $sql);
                             $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
+                            
+
                             // Loop through projects array two at a time to display cover and title in alternating columns
                             for ($i = 0; $i < count($projects); $i += 3) {
                                 echo '<tr>';
@@ -389,7 +391,8 @@ if (isset($_GET['logout'])) {
                                             <a href="deleteProject.php?id=' . $projects[$i]['projectId'] . '">Delete</a>
                                             
                                             </div>
-                                        </div></td>';
+                                        </div>
+                                        ' . $projects[$i]['progressPercentage'] . '%</td>';
                                 // Check if the second project exists
                                 if (isset($projects[$i + 1])) {
                                     // Display second project data
@@ -407,7 +410,8 @@ if (isset($_GET['logout'])) {
                                             <a href="deleteProject.php?id=' . $projects[$i + 1]['projectId'] . '">Delete</a>
                                             
                                             </div>
-                                        </div></td>';
+                                        </div>
+                                        ' . $projects[$i+1]['progressPercentage'] . '%</td>';
 
                                     if (isset($projects[$i + 2])) {
                                         // Display second project data
@@ -425,7 +429,8 @@ if (isset($_GET['logout'])) {
                                             <a href="deleteProject.php?id=' . $projects[$i + 2]['projectId'] . '">Delete</a>
                                             
                                             </div>
-                                        </div></td>';
+                                        </div>
+                                        ' . $projects[$i+2]['progressPercentage'] . '%</td>';
                                     } else {
                                         // If no second project exists, display empty columns
                                         echo '<td></td>';
