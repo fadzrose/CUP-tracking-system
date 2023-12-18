@@ -199,32 +199,37 @@ if (isset($_GET['logout'])) {
             }
         }
 
-
+        /* ... existing styles ... */
 
         .data-container {
             display: flex;
             flex-wrap: wrap;
             justify-content: flex-start;
-            /* Adjust as needed */
             gap: 20px;
-            /* Adjust spacing between items */
         }
 
         .data-row {
             display: flex;
             flex-wrap: wrap;
             width: 100%;
-            /* Ensure it takes the full width */
         }
 
         .data-item {
-            /* Your styles for individual project items */
-            /* Adjust width or flex-basis as needed */
             flex: 1 0 calc(25% - 20px);
-            /* 4 items per row (adjust percentage as per your requirement) */
-            /* In this example, 25% is used to fit 4 items in a row, considering 20px gap between items */
-            /* You can adjust this percentage based on the number of items you want per row */
+            margin-bottom: 20px;
         }
+
+        .project-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .project-details {
+            /* Adjust the styles for project details */
+            font-size: 14px;
+        }
+
 
 
         img {
@@ -390,7 +395,7 @@ if (isset($_GET['logout'])) {
             <div class="card-body">
                 <div class="data-container">
                     <div class="data-row">
-                        
+
                         <?php
                         include "dbconnect.php";
                         $sql = "SELECT project.*, design_layout.* 
@@ -402,23 +407,28 @@ if (isset($_GET['logout'])) {
 
                         foreach ($projects as $project) {
                             echo '<div class="data-item">
-                    <img src="cover/' . $project['projectCover'] . '" width="74" height="105">
-                    Siri ' . $project['siri'] . ' : 
-                    <div class="dropdown">
-                        <div class="dropdown-link" id="dynamicWidthElement" onclick="toggleDropdown()">
-                            ' . $project['title'] . '
-                        </div>
-                        <div id="dropdownContent" class="dropdown-content">
-                            <a href="editProject.php?id=' . $project['projectId'] . '">Edit Project</a><br>
-                            <a href="updateprogressDL.php?id=' . $project['projectId'] . '">Update Progress</a><br>
-                            <a href="deleteProject.php?id=' . $project['projectId'] . '">Delete</a>
-                        </div>
-                    </div>        
-                    <div class="progress-barX">
-                        <div class="progressX" style="width: ' . $project['progressPercentage'] . '%;"></div><br>
-                    </div>
-                    ' . $project['progressPercentage'] . '%
-                  </div>';
+                            <div class="project-info">
+                                <img src="cover/' . $project['projectCover'] . '" style="width: 74px; height: 105px;">
+                                <div class="project-details">
+                                    Siri ' . $project['siri'] . ' : 
+                                    <div class="dropdown">
+                                        <div class="dropdown-link" id="dynamicWidthElement" onclick="toggleDropdown()">
+                                        ' . $project['title'] . '
+                                        </div>
+                                        <div id="dropdownContent" class="dropdown-content">
+                                            <a href="editProject.php?id=' . $project['projectId'] . '">Edit Project</a><br>
+                                            <a href="updateprogressDL.php?id=' . $project['projectId'] . '">Update Progress</a><br>
+                                            <a href="deleteProject.php?id=' . $project['projectId'] . '">Delete</a>
+                                        </div>
+                                    </div>        
+                                    <div class="progress-barX">
+                                        <div class="progressX" style="width: ' . $project['progressPercentage'] . '%;"></div><br>
+                                    </div>
+                                        ' . $project['progressPercentage'] . '%
+                                    
+                                </div>
+                            </div>
+                            </div>';
                         }
                         ?>
 
