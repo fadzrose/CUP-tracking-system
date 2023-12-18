@@ -199,19 +199,33 @@ if (isset($_GET['logout'])) {
             }
         }
 
-        table a {
-            color: black;
-            /* Gantikan dengan kod warna yang anda inginkan */
-            text-decoration: none;
-            /* Menghapuskan garisan di bawah hiperpautan */
+
+
+        .data-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            /* Adjust as needed */
+            gap: 20px;
+            /* Adjust spacing between items */
         }
 
-        /* Gaya hiperpautan apabila dihover */
-        table a:hover {
-            text-decoration: underline;
-            /* Menambahkan garisan di bawah hiperpautan semasa hover */
-            /* Jika anda mahu warna berbeza semasa dihover, anda boleh menambahkan kod warna di sini */
+        .data-row {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            /* Ensure it takes the full width */
         }
+
+        .data-item {
+            /* Your styles for individual project items */
+            /* Adjust width or flex-basis as needed */
+            flex: 1 0 calc(25% - 20px);
+            /* 4 items per row (adjust percentage as per your requirement) */
+            /* In this example, 25% is used to fit 4 items in a row, considering 20px gap between items */
+            /* You can adjust this percentage based on the number of items you want per row */
+        }
+
 
         img {
             align-items: center;
@@ -262,22 +276,31 @@ if (isset($_GET['logout'])) {
         }
 
         .dropdown-content {
-            display:none;
+            display: none;
             position: absolute;
             background-color: #f9f9f9;
-            width: 170px;
+            width: 200px;
             box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
             border-radius: 4px;
             z-index: 1000;
-            text-decoration: none;
+
             padding: 8px 12px;
+            margin: 5px;
 
         }
 
-        .dropdown-content a:hover {
+        .dropdown-content a {
             text-decoration: none;
+            color: black;
+            margin: 5px;
+            width: 200px;
+        }
+
+        .dropdown-content a:hover {
+            margin: 5px;
             background-color: #ffe5ec;
-            padding: 8px;
+            padding: 8px 12px;
+            border-radius: 4px;
         }
 
         .dropdown:hover .dropdown-content {
@@ -365,112 +388,46 @@ if (isset($_GET['logout'])) {
                 </div>
             </div>
             <div class="card-body">
+                <div class="data-container">
+                    <div class="data-row">
+                        
+                        <?php
+                        include "dbconnect.php";
+                        $sql = "SELECT project.*, design_layout.* 
+                FROM project 
+                INNER JOIN design_layout ON project.projectId = design_layout.projectId
+                ORDER BY progressPercentage"; // Modify the join condition based on your actual table structure
+                        $result = mysqli_query($dbc, $sql);
+                        $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+                        foreach ($projects as $project) {
+                            echo '<div class="data-item">
+                    <img src="cover/' . $project['projectCover'] . '" width="74" height="105">
+                    Siri ' . $project['siri'] . ' : 
+                    <div class="dropdown">
+                        <div class="dropdown-link" id="dynamicWidthElement" onclick="toggleDropdown()">
+                            ' . $project['title'] . '
+                        </div>
+                        <div id="dropdownContent" class="dropdown-content">
+                            <a href="editProject.php?id=' . $project['projectId'] . '">Edit Project</a><br>
+                            <a href="updateprogressDL.php?id=' . $project['projectId'] . '">Update Progress</a><br>
+                            <a href="deleteProject.php?id=' . $project['projectId'] . '">Delete</a>
+                        </div>
+                    </div>        
+                    <div class="progress-barX">
+                        <div class="progressX" style="width: ' . $project['progressPercentage'] . '%;"></div><br>
+                    </div>
+                    ' . $project['progressPercentage'] . '%
+                  </div>';
+                        }
+                        ?>
+
+                    </div>
+                </div>
+
+
+
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-
-                        <tbody>
-                            <?php
-                            include "dbconnect.php";
-                            $sql = "SELECT project.*, design_layout.* 
-                                    FROM project 
-                                    INNER JOIN design_layout ON project.projectId = design_layout.projectId
-                                    ORDER BY progressPercentage"; // Modify the join condition based on your actual table structure
-                            $result = mysqli_query($dbc, $sql);
-                            $projects = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-
-
-                            // Loop through projects array two at a time to display cover and title in alternating columns
-                            for ($i = 0; $i < count($projects); $i += 3) {
-                                echo '<tr>';
-
-                                // Display first project data
-                                echo
-                                '<td style="text-align: center">
-                                        <img src="cover/' . $projects[$i]['projectCover'] . '" width="74" height="105"></td>';
-                                echo '<td>Siri ' . $projects[$i]['siri'] . ' : 
-                                        
-                                        <div class="dropdown">
-                                            <div class="dropdown-link" id="dynamicWidthElement" onclick="toggleDropdown()">
-                                                ' . $projects[$i]['title'] . '
-                                            </div>
-                                            <div id="dropdownContent" class="dropdown-content">
-
-                                            <a href="editProject.php?id=' . $projects[$i]['projectId'] . '">Edit Project</a><br>
-                                            <a href="updateprogressDL.php?id=' . $projects[$i]['projectId'] . '">Update Progress</a><br>
-                                            <a href="deleteProject.php?id=' . $projects[$i]['projectId'] . '">Delete</a>
-                                            
-                                            </div>
-                                        </div>        
-
-                                        
-                                <div class="progress-barX">
-                                            <div class="progressX" style="width: ' . $projects[$i]['progressPercentage'] . '%;"></div>
-                                        </div>
-                                        ' . $projects[$i]['progressPercentage'] . '%</td>';
-                                // Check if the second project exists
-                                if (isset($projects[$i + 1])) {
-                                    // Display second project data
-                                    echo
-                                    '<td style="text-align: center">
-                                        <img src="cover/' . $projects[$i + 1]['projectCover'] . '" width="74" height="105"></td>';
-                                    echo '<td>Siri ' . $projects[$i + 1]['siri'] . ' : <div class="dropdown">
-                                            <div class="dynamic-width" id="dynamicWidthElement" onclick="toggleDropdown()">
-                                                ' . $projects[$i + 1]['title'] . '
-                                            </div>
-                                            <div id="dropdownContent" class="dropdown-content">
-
-                                            <a href="editProject.php?id=' . $projects[$i + 1]['projectId'] . '">Edit Project</a><br>
-                                            <a href="updateprogressDL.php?id=' . $projects[$i + 1]['projectId'] . '">Update Progress</a><br>
-                                            <a href="deleteProject.php?id=' . $projects[$i + 1]['projectId'] .
-                                        '">Delete</a>
-                                            
-                                            </div>
-                                        </div>
-                                        <div class="progress-barX">
-                                            <div class="progressX" style="width: ' . $projects[$i + 1]['progressPercentage'] . '%;"></div>
-                                        </div>
-                                        ' . $projects[$i + 1]['progressPercentage'] . '%</td>';
-
-                                    if (isset($projects[$i + 2])) {
-                                        // Display second project data
-                                        echo
-                                        '<td style="text-align: center">
-                                        <img src="cover/' . $projects[$i + 2]['projectCover'] . '" width="74" height="105"></td>';
-                                        echo '<td>Siri ' . $projects[$i + 2]['siri'] . ' : <div class="dropdown">
-                                            <div class="dynamic-width" id="dynamicWidthElement" onclick="toggleDropdown()">
-                                                ' . $projects[$i + 2]['title'] . '
-                                            </div>
-                                            <div id="dropdownContent" class="dropdown-content">
-
-                                            <a href="editProject.php?id=' . $projects[$i + 2]['projectId'] . '">Edit Project</a><br>
-                                            <a href="updateprogressDL.php?id=' . $projects[$i + 2]['projectId'] . '">Update Progress</a><br>
-                                            <a href="deleteProject.php?id=' . $projects[$i + 2]['projectId'] . '">Delete</a>
-                                            
-                                            </div>
-                                        </div>
-                                        <div class="progress-barX">
-                                            <div class="progressX" style="width: ' . $projects[$i + 2]['progressPercentage'] . '%;"></div>
-                                        </div>
-                                        ' . $projects[$i + 2]['progressPercentage'] . '%</td>';
-                                    } else {
-                                        // If no second project exists, display empty columns
-                                        echo '<td></td>';
-                                        echo '<td></td>';
-                                    }
-                                } else {
-                                    // If no second project exists, display empty columns
-                                    echo '<td></td>';
-                                    echo '<td></td>';
-                                    echo '<td></td>';
-                                }
-
-                                echo '</tr>';
-                            }
-                            ?>
-                        </tbody>
-                    </table>
-
 
                     <hr class="hr hr-blurry" />
 
@@ -506,14 +463,13 @@ if (isset($_GET['logout'])) {
                         <th>Finishing</th>
                         <th>Action</th>
                     </tr>
-                </thead>
-        ';
+                </thead>';
                             $displayHeader = false; // Set to false so that header won't be displayed again
                         }
 
                         // Display details of incomplete projects
                         echo '
-        <tr>
+            <tr>
             <td><img src="cover/' . $row['projectCover'] . '" width="74" height="105" </td>
             <td>' . $row['title'] . '</td>
             <td>' . $row['siri'] . '</td>
@@ -527,77 +483,74 @@ if (isset($_GET['logout'])) {
                     <span class="text">Delete</span>
                 </a>
             </td>
-        </tr>
-    ';
+            </tr>';
                     }
                     echo '</table>'; // Close the table outside the loop
                     ?>
+
                 </div>
-            </div>
-        </div>
-    </div>
 
-    <div id="footer" class="footer">
-        <br>
-        <p>Copyright &copy; 2023 Ana Muslim Sdn Bhd. All rightsreserved.</p>
+                <div id="footer" class="footer">
+                    <br>
+                    <p>Copyright &copy; 2023 Ana Muslim Sdn Bhd. All rightsreserved.</p>
 
-    </div>
+                </div>
 
-    <script>
-        /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
-        function openNav() {
-            document.getElementById("mySidebar").style.width = "200px";
-            document.getElementById("main").style.marginLeft = "240px";
-            document.getElementById("main").style.marginRight = "40px";
-            document.getElementById("footer").style.marginLeft = "200px";
-            document.getElementById("header").style.marginLeft = "200px";
-        }
+                <script>
+                    /* Set the width of the sidebar to 250px and the left margin of the page content to 250px */
+                    function openNav() {
+                        document.getElementById("mySidebar").style.width = "200px";
+                        document.getElementById("main").style.marginLeft = "240px";
+                        document.getElementById("main").style.marginRight = "40px";
+                        document.getElementById("footer").style.marginLeft = "200px";
+                        document.getElementById("header").style.marginLeft = "200px";
+                    }
 
-        /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
-        function closeNav() {
-            document.getElementById("mySidebar").style.width = "0";
-            document.getElementById("main").style.marginLeft = "5%";
-            document.getElementById("footer").style.marginLeft = "0";
-            document.getElementById("header").style.marginLeft = "0";
-        }
-        // Get all dropdown links
-        const dropdownLinks = document.querySelectorAll('.dropdown-link');
+                    /* Set the width of the sidebar to 0 and the left margin of the page content to 0 */
+                    function closeNav() {
+                        document.getElementById("mySidebar").style.width = "0";
+                        document.getElementById("main").style.marginLeft = "5%";
+                        document.getElementById("footer").style.marginLeft = "0";
+                        document.getElementById("header").style.marginLeft = "0";
+                    }
+                    // Get all dropdown links
+                    const dropdownLinks = document.querySelectorAll('.dropdown-link');
 
-        // Iterate through each dropdown link and attach a click event listener
-        dropdownLinks.forEach(link => {
-            link.addEventListener('click', function(event) {
-                event.preventDefault(); // Prevent the default link behavior
+                    // Iterate through each dropdown link and attach a click event listener
+                    dropdownLinks.forEach(link => {
+                        link.addEventListener('click', function(event) {
+                            event.preventDefault(); // Prevent the default link behavior
 
-                // Toggle the visibility of the associated dropdown content
-                const content = this.nextElementSibling;
-                if (content.style.display === 'block') {
-                    content.style.display = 'none';
-                } else {
-                    // Hide any other open dropdowns before displaying this one
-                    const allDropdownContents = document.querySelectorAll('.dropdown-content');
-                    allDropdownContents.forEach(item => {
-                        if (item !== content) {
-                            item.style.display = 'none';
-                        }
+                            // Toggle the visibility of the associated dropdown content
+                            const content = this.nextElementSibling;
+                            if (content.style.display === 'block') {
+                                content.style.display = 'none';
+                            } else {
+                                // Hide any other open dropdowns before displaying this one
+                                const allDropdownContents = document.querySelectorAll('.dropdown-content');
+                                allDropdownContents.forEach(item => {
+                                    if (item !== content) {
+                                        item.style.display = 'none';
+                                    }
+                                });
+
+                                content.style.display = 'block';
+                            }
+                        });
                     });
 
-                    content.style.display = 'block';
-                }
-            });
-        });
+                    // Close dropdown when clicking outside
+                    window.addEventListener('click', function(event) {
+                        const dropdowns = document.querySelectorAll('.dropdown');
+                        dropdowns.forEach(dropdown => {
+                            if (!dropdown.contains(event.target)) {
+                                dropdown.querySelector('.dropdown-content').style.display = 'none';
+                            }
+                        });
+                    });
+                </script>
 
-        // Close dropdown when clicking outside
-        window.addEventListener('click', function(event) {
-            const dropdowns = document.querySelectorAll('.dropdown');
-            dropdowns.forEach(dropdown => {
-                if (!dropdown.contains(event.target)) {
-                    dropdown.querySelector('.dropdown-content').style.display = 'none';
-                }
-            });
-        });
-    </script>
-
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </body>
 
 </html>
