@@ -213,21 +213,6 @@ if (isset($_GET['logout'])) {
             /* Jika anda mahu warna berbeza semasa dihover, anda boleh menambahkan kod warna di sini */
         }
 
-
-        .dynamic-width {
-            display: inline-block;
-            /* Set initial width or use min-width to ensure a minimum width */
-            min-width: 100px;
-            /* Optionally, you can set a max-width to prevent it from becoming too wide */
-            max-width: 100%;
-            /* Other styles as needed */
-            background-color: whitesmoke;
-            border-radius: 4px;
-            padding: 2px;
-            cursor: pointer;
-        }
-
-
         img {
             align-items: center;
             border: 5px solid #555;
@@ -250,53 +235,53 @@ if (isset($_GET['logout'])) {
         }
 
 
-        .dropbtn:hover,
-        .dropbtn:focus {
-            background-color: pink;
+        .dropdown {
+            position: relative;
+            display: inline-block;
         }
 
-        /* Style the dropdown content */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-            border-radius: 4px;
-            z-index: 1000;
-            /* Set a higher z-index */
-        }
-
-
-        /* Links inside the dropdown */
-        /* Style for dropdown anchor tags */
         .dropdown-link {
             size: 11;
             color: black;
             padding: 5px 5px;
             text-decoration: none;
             display: block;
+            /* Set initial width or use min-width to ensure a minimum width */
+            min-width: 100px;
+            /* Optionally, you can set a max-width to prevent it from becoming too wide */
+            max-width: 100%;
+            /* Other styles as needed */
+            background-color: whitesmoke;
             border-radius: 4px;
+            padding: 2px;
+            cursor: pointer;
         }
 
-        .dropdown-content a.dropdown-link:hover {
-            background-color: #f1f1f1;
-            border-radius: 4px;
-            /* Add other specific styles for dropdown links on hover */
+        .dropdown-link:hover {
+            background-color: #ffe5ec;
         }
 
-        /* Show the dropdown menu on hover */
+        .dropdown-content {
+            display:none;
+            position: absolute;
+            background-color: #f9f9f9;
+            width: 170px;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+            z-index: 1000;
+            text-decoration: none;
+            padding: 8px 12px;
+
+        }
+
+        .dropdown-content a:hover {
+            text-decoration: none;
+            background-color: #ffe5ec;
+            padding: 8px;
+        }
+
         .dropdown:hover .dropdown-content {
             display: block;
-            z-index: 1000;
-            /* Set a higher z-index */
-        }
-
-        /* Show the dropdown menu when the button is focused */
-        .dropdown:focus-within .dropdown-content {
-            display: block;
-            z-index: 1000;
-            /* Set a higher z-index */
         }
 
         /* CSS Styles for Progress Bar */
@@ -406,7 +391,7 @@ if (isset($_GET['logout'])) {
                                 echo '<td>Siri ' . $projects[$i]['siri'] . ' : 
                                         
                                         <div class="dropdown">
-                                            <div class="dynamic-width" id="dynamicWidthElement" onclick="toggleDropdown()">
+                                            <div class="dropdown-link" id="dynamicWidthElement" onclick="toggleDropdown()">
                                                 ' . $projects[$i]['title'] . '
                                             </div>
                                             <div id="dropdownContent" class="dropdown-content">
@@ -575,6 +560,41 @@ if (isset($_GET['logout'])) {
             document.getElementById("footer").style.marginLeft = "0";
             document.getElementById("header").style.marginLeft = "0";
         }
+        // Get all dropdown links
+        const dropdownLinks = document.querySelectorAll('.dropdown-link');
+
+        // Iterate through each dropdown link and attach a click event listener
+        dropdownLinks.forEach(link => {
+            link.addEventListener('click', function(event) {
+                event.preventDefault(); // Prevent the default link behavior
+
+                // Toggle the visibility of the associated dropdown content
+                const content = this.nextElementSibling;
+                if (content.style.display === 'block') {
+                    content.style.display = 'none';
+                } else {
+                    // Hide any other open dropdowns before displaying this one
+                    const allDropdownContents = document.querySelectorAll('.dropdown-content');
+                    allDropdownContents.forEach(item => {
+                        if (item !== content) {
+                            item.style.display = 'none';
+                        }
+                    });
+
+                    content.style.display = 'block';
+                }
+            });
+        });
+
+        // Close dropdown when clicking outside
+        window.addEventListener('click', function(event) {
+            const dropdowns = document.querySelectorAll('.dropdown');
+            dropdowns.forEach(dropdown => {
+                if (!dropdown.contains(event.target)) {
+                    dropdown.querySelector('.dropdown-content').style.display = 'none';
+                }
+            });
+        });
     </script>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
