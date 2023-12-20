@@ -56,7 +56,8 @@ if (isset($_GET['logout'])) {
             padding: 10px;
             text-align: center;
             background: #FFB7C3;
-            color: black;
+            color: white;
+
             font-size: 30px;
 
         }
@@ -168,7 +169,7 @@ if (isset($_GET['logout'])) {
             font-size: 20px;
             cursor: pointer;
             background-color: pink;
-            color: black;
+            color: white;
             padding: 10px 15px;
             border: none;
             box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.2);
@@ -238,6 +239,8 @@ if (isset($_GET['logout'])) {
             border-radius: 4px;
             background-color: #ffe5ec;
             border-color: #ff8fab;
+            width: 74px;
+            height: 105px;
         }
 
         /* Style the dropdown button */
@@ -348,8 +351,20 @@ if (isset($_GET['logout'])) {
 <body style="background: #ffe5ec;">
     <div class="header" id="header">
         <div>
+            <table width="100%">
+                <tr>
+                    <th>
+                        <div align="left"><button class="openbtn" onclick="openNav()">&#9776; </button></div>
+                    </th>
+                    <th>
+                        <p align="center"><!--style="outline: black 10px;"-->
 
-            <p align="left"><button class="openbtn" onclick="openNav()">&#9776; </button> Creative Unit Production System</p>
+                            Creative Unit Production System
+                        </p>
+                    </th>
+                </tr>
+            </table>
+
         </div>
 
     </div>
@@ -408,9 +423,9 @@ if (isset($_GET['logout'])) {
                         foreach ($projects as $project) {
                             echo '<div class="data-item">
                             <div class="project-info">
-                                <img src="cover/' . $project['projectCover'] . '" style="width: 74px; height: 105px;">
+                                <img src="cover/' . $project['projectCover'] . '" >
                                 <div class="project-details">
-                                    Siri ' . $project['siri'] . ' : 
+                                    Siri ' . $project['siri'] . ' : <br>
                                     <div class="dropdown">
                                         <div class="dropdown-link" id="dynamicWidthElement" onclick="toggleDropdown()">
                                         ' . $project['title'] . '
