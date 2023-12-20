@@ -55,7 +55,7 @@ if (isset($_GET['logout'])) {
         .header {
             padding: 10px;
             text-align: center;
-            background: #FFB7C3;
+            background: #ff8fab;
             color: white;
 
             font-size: 30px;
@@ -67,7 +67,7 @@ if (isset($_GET['logout'])) {
             left: 0;
             bottom: 0;
             width: 100%;
-            background-color: #FFB7C3;
+            background-color: #ff8fab;
             color: white;
             text-align: center;
         }
@@ -81,7 +81,7 @@ if (isset($_GET['logout'])) {
             font-family: arial;
             padding: 20px;
             box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.2);
-            background: #ffe5ec
+
         }
 
         input[type=email] {
@@ -432,7 +432,7 @@ if (isset($_GET['logout'])) {
                                         </div>
                                         <div id="dropdownContent" class="dropdown-content">
                                             <a href="editProject.php?id=' . $project['projectId'] . '">Edit Project</a><br>
-                                            <a href="updateprogressDL.php?id=' . $project['projectId'] . '">Update Progress</a><br>
+                                            <a href="editprogress.php?id=' . $project['projectId'] . '">Update Progress</a><br>
                                             <a href="deleteProject.php?id=' . $project['projectId'] . '">Delete</a>
                                         </div>
                                     </div>        

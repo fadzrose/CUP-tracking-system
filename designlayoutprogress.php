@@ -1,7 +1,4 @@
-<?php
-require 'dbconnect.php';
-$qpersonnels = query("SELECT * FROM personnel");
-?>
+
 
 <?php
 include "dbconnect.php";
@@ -80,8 +77,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
     if (mysqli_multi_query($dbc, $combinedQueries)) {
         do {
             // Check each query result
-            if ($result = mysqli_store_result($dbc)
-            ) {
+            if ($result = mysqli_store_result($dbc)) {
                 mysqli_free_result($result);
             }
         } while (mysqli_next_result($dbc));
@@ -399,6 +395,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
             margin-right: 10px;
             /* Adjust spacing between label and input */
         }
+
+        .table-container {
+            /* Set a max-height to the table container to enable scrolling */
+            max-height: 100%;
+            /* Adjust this value as needed */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+        }
+
+        /* Optional: Adjust table width */
+        .table-container table {
+            width: 90%;
+        }
     </style>
 </head>
 
@@ -442,49 +451,51 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
 
             <form action="" method="post" enctype="multipart/form-data" class="css-dropdown">
                 <div class="card-body">
-                    <table width="70%" align="center">
-                        <col style="width:30%">
-                        <col style="width:30%">
-                        <col style="width:10%">
-                        <tr>
-                            <td><label for="DLstart">Starting Date</label>
-                                <input type="date" class="form-control" id="DLstart" name="DLstart" />
-                            </td>
-                            <td><label for="DLdue">Due Date</label>
-                                <input type="date" class="form-control" id="DLdue" name="DLdue" />
-                            </td>
-                            <td rowspan="3">
-                                <br>
-                                <label for="projectCover">Project Cover</label>
-                                <div class="container-cover">
-                                    <div id="preview"></div>
-                                    <input type="file" id="fileInput" name="projectCover" multiple>
-                                </div>
+                    <div class="table-container">
+                        <table width="70%" align="center">
+                            <col style="width:30%">
+                            <col style="width:30%">
+                            <col style="width:10%">
+                            <tr>
+                                <td><label for="DLstart">Starting Date</label>
+                                    <input type="date" class="form-control" id="DLstart" name="DLstart" />
+                                </td>
+                                <td><label for="DLdue">Due Date</label>
+                                    <input type="date" class="form-control" id="DLdue" name="DLdue" />
+                                </td>
+                                <td rowspan="3">
+                                    <br>
+                                    <label for="projectCover">Project Cover</label>
+                                    <div class="container-cover">
+                                        <div id="preview"></div>
+                                        <input type="file" id="fileInput" name="projectCover" multiple>
+                                    </div>
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><label for="DLstatus">Approval Status</label>
-                                <select class="form-control " id="DLstatus" name="DLstatus" required>
-                                    <option value="" selected disabled>
-                                        Please select the status
-                                    </option>
-                                    <option value="Not Yet Proposed">Not Yet Proposed</option>
-                                    <option value="Pending Approval">Pending Approval</option>
-                                    <option value="Approved">Approved</option>
-                                </select>
-                            </td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><label for="DLstatus">Approval Status</label>
+                                    <select class="form-control " id="DLstatus" name="DLstatus" required>
+                                        <option value="" selected disabled>
+                                            Please select the status
+                                        </option>
+                                        <option value="Not Yet Proposed">Not Yet Proposed</option>
+                                        <option value="Pending Approval">Pending Approval</option>
+                                        <option value="Approved">Approved</option>
+                                    </select>
+                                </td>
 
-                        </tr>
-                        <tr>
-                            <td colspan="2"><label for="DLprogress">Progress (%)</label>
-                                <input type="number" class="form-control" id="DLprogress" name="DLprogress" min="0" max="100" />
-                            </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><label for="DLprogress">Progress (%)</label>
+                                    <input type="number" class="form-control" id="DLprogress" name="DLprogress" min="0" max="100" />
+                                </td>
 
-                        </tr>
+                            </tr>
 
 
-                    </table>
+                        </table>
+                    </div>
 
                     <hr class="hr hr-blurry" />
                     <!--divider-->
@@ -494,7 +505,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
                         </h1>
                     </div>
 
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <div class="table-container">
                         <table width="80%" align="center">
                             <col style="width:50%">
                             <col style="width:10%">

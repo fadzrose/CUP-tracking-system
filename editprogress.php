@@ -1,97 +1,43 @@
 <?php
-require 'dbconnect.php';
-$qpersonnels = query("SELECT * FROM personnel");
-?>
+set_time_limit(300); // Set maximum execution time to 300 seconds (5 minutes)
 
-<?php
-include "dbconnect.php";
+include 'dbconnect.php';
 
-if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
-    // Process the form data here when the form is submitted
-    $xprojid = $_GET['id']; // Retrieve the ID from the URL parameter
+$xprojId = $_GET['id'];
 
-    $xprojstart = $_POST['DLstart'];
-    $xprojdue = $_POST['DLdue'];
-    $xapprovalstat = $_POST['DLstatus'];
-    $xpercentage = $_POST['DLprogress'];
-    $xcover = $_FILES['projectCover']['name'];
-    $tempname = $_FILES['projectCover']['tmp_name'];
-    $folder = "cover/" . $xcover;
-    if (move_uploaded_file($tempname, $folder)) {
-        echo '<script>alert("Cover have been saved.");</script>';
-    } else {
-        echo "Error uploading file.";
-    }
+$listprog = "SELECT * FROM `design_layout` WHERE `projectId`='$xprojId'";
+$result_prog = mysqli_query($dbc, $listprog);
+$row = mysqli_fetch_assoc($result_prog);
 
+$listms = "SELECT * FROM `dl_milestones` WHERE `projectId`='$xprojId'";
+$result_ms = mysqli_query($dbc, $listms);
+$row2 = mysqli_fetch_assoc($result_ms);
 
-    //$xprojstart = $_POST['MRStartDate'];
-    $xMRdue = $_POST['MRTargetDate'];
-    $xMRdone = $_POST['MRActualDate'];
-
-    $xCDstart = $_POST['CDStartDate'];
-    $xCDdue = $_POST['CDTargetDate'];
-    $xCDdone = $_POST['CDActualDate'];
-
-    $xITstart = $_POST['ITStartDate'];
-    $xITdue = $_POST['ITTargetDate'];
-    $xITdone = $_POST['ITActualDate'];
-
-    $xICstart = $_POST['ICStartDate'];
-    $xICdue = $_POST['ICTargetDate'];
-    $xICdone = $_POST['ICActualDate'];
-
-    $xGLTstart = $_POST['GLTStartDate'];
-    $xGLTdue = $_POST['GLTTargetDate'];
-    $xGLTdone = $_POST['GLTActualDate'];
-
-    $xGLCstart = $_POST['GLCStartDate'];
-    $xGLCdue = $_POST['GLCTargetDate'];
-    $xGLCdone = $_POST['GLCActualDate'];
-
-    $xPCstart = $_POST['PCStartDate'];
-    //$xprojdue = $_POST['PCTargetDate'];
-    $xPCdone = $_POST['PCActualDate'];
-
-    $xPDPstart = $_POST['PDPStartDate'];
-    $xPDPdue = $_POST['PDPTargetDate'];
-    $xPDPdone = $_POST['PDPActualDate'];
-
-    /*$sqlinDL = "UPDATE `design_layout` (`designLayoutId`, `statusApproval`, `progressPercentage`, `projectCover`, `projectId`) VALUES ('', '$xapprovalstat', '$xpercentage', '$xcover', '$xprojid')";
-    //echo "SQL query: " . $sqlupd; // Check the formed SQL query
-    $sqlinMR = "INSERT INTO `dl_milestones` (`actionItemId`, `actionItem`, `startDate`, `targetDate`, `actualDate`, `status`, `projectId`) VALUES ('', 'Manuscript Readiness', '$xprojstart', '$xMRdue','$xMRdone','', '$xprojid')";
-    $sqlinCD = "INSERT INTO `dl_milestones` (`actionItemId`, `actionItem`, `startDate`, `targetDate`, `actualDate`, `status`, `projectId`) VALUES ('', 'Concept Development', '$xCDstart', '$xCDdue','$xCDdone','', '$xprojid')";
-    $sqlinIT = "INSERT INTO `dl_milestones` (`actionItemId`, `actionItem`, `startDate`, `targetDate`, `actualDate`, `status`, `projectId`) VALUES ('', 'Illustration (Text)', '$xITstart', '$xITdue','$xITdone','', '$xprojid')";
-    $sqlinIC = "INSERT INTO `dl_milestones` (`actionItemId`, `actionItem`, `startDate`, `targetDate`, `actualDate`, `status`, `projectId`) VALUES ('', 'Illustration (Cover)', '$xICstart', '$xICdue','$xICdone','', '$xprojid')";
-    $sqlinGLT = "INSERT INTO `dl_milestones` (`actionItemId`, `actionItem`, `startDate`, `targetDate`, `actualDate`, `status`, `projectId`) VALUES ('', 'Graphic Layout (Text)', '$xGLTstart', '$xGLTdue','$xGLTdone','', '$xprojid')";
-    $sqlinGLC = "INSERT INTO `dl_milestones` (`actionItemId`, `actionItem`, `startDate`, `targetDate`, `actualDate`, `status`, `projectId`) VALUES ('', 'Graphic Layout (Cover)', '$xGLCstart', '$xGLCdue','$xGLCdone','', '$xprojid')";
-    $sqlinPC = "INSERT INTO `dl_milestones` (`actionItemId`, `actionItem`, `startDate`, `targetDate`, `actualDate`, `status`, `projectId`) VALUES ('', 'Proofing & Correction', '$xPCstart', '$xprojdue','$xPCdone','', '$xprojid')";
-    $sqlinPDP = "INSERT INTO `dl_milestones` (`actionItemId`, `actionItem`, `startDate`, `targetDate`, `actualDate`, `status`, `projectId`) VALUES ('', 'PDP & ISBN Application', '$xPDPstart', '$xPDPdue','$xPDPdone','', '$xprojid')";
-*/
-
-    $sqlQueries = [
-        $sqlinDL, $sqlinMR, $sqlinCD, $sqlinIT, $sqlinIC,
-        $sqlinGLT, $sqlinGLC, $sqlinPC, $sqlinPDP
-    ];
-
-    // Combine all queries into a single string separated by semicolons
-    $combinedQueries = implode(';', $sqlQueries);
-
-    // Execute multiple queries
-    if (mysqli_multi_query($dbc, $combinedQueries)) {
-        do {
-            // Check each query result
-            if ($result = mysqli_store_result($dbc)) {
-                mysqli_free_result($result);
-            }
-        } while (mysqli_next_result($dbc));
-
-        // All queries executed successfully
-        echo '<script>alert("Progress have been saved.");</script>';
-        print '<script>window.location.assign("allprojectlist.php");</script>';
-    } else {
-        // At least one query failed
-        echo "Warning: Failed to save. MySQL Error: " . mysqli_error($dbc);
-    }
+if ($row2) {
+    $list_MR = "SELECT * FROM `dl_milestones` WHERE `projectId`='$xprojId' AND `actionItem`='Manuscript Readiness'";
+    $result_MR = mysqli_query($dbc, $list_MR);
+    $row3 = mysqli_fetch_assoc($result_MR);
+    $list_CD = "SELECT * FROM `dl_milestones` WHERE `projectId`='$xprojId' AND `actionItem`='Concept Development'";
+    $result_CD = mysqli_query($dbc, $list_CD);
+    $row4 = mysqli_fetch_assoc($result_CD);
+    $list_IT = "SELECT * FROM `dl_milestones` WHERE `projectId`='$xprojId' AND `actionItem`='Illustrator (Text)'";
+    $result_IT = mysqli_query($dbc, $list_IT);
+    $row5 = mysqli_fetch_assoc($result_IT);
+    $list_IC = "SELECT * FROM `dl_milestones` WHERE `projectId`='$xprojId' AND `actionItem`='Illustrator (Cover)'";
+    $result_IC = mysqli_query($dbc, $list_IC);
+    $row6 = mysqli_fetch_assoc($result_IC);
+    $list_GLT = "SELECT * FROM `dl_milestones` WHERE `projectId`='$xprojId' AND `actionItem`='Graphic Layout (Text)'";
+    $result_GLT = mysqli_query($dbc, $list_GLT);
+    $row7 = mysqli_fetch_assoc($result_GLT);
+    $list_GLC = "SELECT * FROM `dl_milestones` WHERE `projectId`='$xprojId' AND `actionItem`='Graphic Layout (Cover)'";
+    $result_GLC = mysqli_query($dbc, $list_GLC);
+    $row8 = mysqli_fetch_assoc($result_GLC);
+    $list_PC = "SELECT * FROM `dl_milestones` WHERE `projectId`='$xprojId' AND `actionItem`='Proofing & Correction'";
+    $result_PC = mysqli_query($dbc, $list_PC);
+    $row9 = mysqli_fetch_assoc($result_PC);
+    $list_PDP = "SELECT * FROM `dl_milestones` WHERE `projectId`='$xprojId' AND `actionItem`='PDP & ISBN Application'";
+    $result_PDP = mysqli_query($dbc, $list_PDP);
+    $row10 = mysqli_fetch_assoc($result_PDP);
 }
 ?>
 
@@ -398,6 +344,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
             margin-right: 10px;
             /* Adjust spacing between label and input */
         }
+
+        .table-container {
+            /* Set a max-height to the table container to enable scrolling */
+            max-height: 100%;
+            /* Adjust this value as needed */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+        }
+
+        /* Optional: Adjust table width */
+        .table-container table {
+            width: 90%;
+        }
     </style>
 </head>
 
@@ -439,51 +398,53 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
                 </h1>
             </div>
 
-            <form action="" method="post" enctype="multipart/form-data" class="css-dropdown">
+            <form action="updateprogress.php?id=<?php echo $xprojId; ?>" method="post" enctype="multipart/form-data" class="css-dropdown">
                 <div class="card-body">
-                    <table width="70%" align="center">
-                        <col style="width:30%">
-                        <col style="width:30%">
-                        <col style="width:10%">
-                        <tr>
-                            <td><label for="DLstart">Starting Date</label>
-                                <input type="date" class="form-control" id="DLstart" name="DLstart" />
-                            </td>
-                            <td><label for="DLdue">Due Date</label>
-                                <input type="date" class="form-control" id="DLdue" name="DLdue" />
-                            </td>
-                            <td rowspan="3">
-                                <br>
-                                <label for="projectCover">Project Cover</label>
-                                <div class="container-cover">
-                                    <div id="preview"></div>
-                                    <input type="file" id="fileInput" name="projectCover" multiple>
-                                </div>
+                    <div class="table-container">
+                        <table width="70%" align="center">
+                            <col style="width:30%">
+                            <col style="width:30%">
+                            <col style="width:10%">
+                            <tr>
+                                <td><label for="DLstart">Starting Date</label>
+                                    <input type="date" class="form-control" id="DLstart" name="DLstart" value="<?= $row3['startDate'] ?>" disabled />
+                                </td>
+                                <td><label for="DLdue">Due Date</label>
+                                    <input type="date" class="form-control" id="DLdue" name="DLdue" value="<?= $row9['targetDate'] ?>" />
+                                </td>
+                                <td rowspan="3">
+                                    <br>
+                                    <label for="projectCover">Project Cover</label>
+                                    <div class="container-cover">
+                                        <div id="preview"></div>
+                                        <input type="file" id="fileInput" name="projectCover" value="<?= $row['projectCover'] ?>" multiple>
+                                    </div>
 
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><label for="DLstatus">Approval Status</label>
-                                <select class="form-control " id="DLstatus" name="DLstatus" required>
-                                    <option value="" selected disabled>
-                                        Please select the status
-                                    </option>
-                                    <option value="Not Yet Proposed">Not Yet Proposed</option>
-                                    <option value="Pending Approval">Pending Approval</option>
-                                    <option value="Approved">Approved</option>
-                                </select>
-                            </td>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><label for="DLstatus">Approval Status</label>
+                                    <select class="form-control " id="DLstatus" name="DLstatus" required>
+                                        <option value="<?= $row['statusApproval'] ?>" selected>
+                                            <?= $row['statusApproval'] ?>
+                                        </option>
+                                        <option value="Not Yet Proposed">Not Yet Proposed</option>
+                                        <option value="Pending Approval">Pending Approval</option>
+                                        <option value="Approved">Approved</option>
+                                    </select>
+                                </td>
 
-                        </tr>
-                        <tr>
-                            <td colspan="2"><label for="DLprogress">Progress (%)</label>
-                                <input type="number" class="form-control" id="DLprogress" name="DLprogress" min="0" max="100" />
-                            </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"><label for="DLprogress">Progress (%)</label>
+                                    <input type="number" class="form-control" id="DLprogress" name="DLprogress" min="0" max="100" value="<?= $row['progressPercentage'] ?>" />
+                                </td>
 
-                        </tr>
+                            </tr>
 
 
-                    </table>
+                        </table>
+                    </div>
 
                     <hr class="hr hr-blurry" />
                     <!--divider-->
@@ -493,7 +454,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
                         </h1>
                     </div>
 
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                    <div class="table-container">
                         <table width="80%" align="center">
                             <col style="width:50%">
                             <col style="width:10%">
@@ -515,56 +476,56 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_GET['id'])) {
                                 </td>
                             </tr>
                             <td>Manuscript Readiness</td>
-                            <td><input type="date" class="form-control" id="MRStartDate" name="MRStartDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                            <td><input type="date" class="form-control" id="MRTargetDate" name="MRTargetDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                            <td><input type="date" class="form-control" id="MRActualDate" name="MRActualDate" min="<?php echo date('Y-m-d'); ?>" /></td>
+                            <td><input type="date" class="form-control" id="MRStartDate" name="MRStartDate" value="<?= $row3['startDate'] ?>" disabled /></td>
+                            <td><input type="date" class="form-control" id="MRTargetDate" name="MRTargetDate" value="<?= $row3['startDate'] ?>" /></td>
+                            <td><input type="date" class="form-control" id="MRActualDate" name="MRActualDate" value="<?= $row3['startDate'] ?>" /></td>
                             </tr>
 
                             <tr>
                                 <td>Concept Development</td>
-                                <td><input type="date" class="form-control" id="CDStartDate" name="CDStartDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="CDTargetDate" name="CDTargetDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="CDActualDate" name="CDActualDate" min="<?php echo date('Y-m-d'); ?>" /></td>
+                                <td><input type="date" class="form-control" id="CDStartDate" name="CDStartDate" value="<?= $row4['startDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="CDTargetDate" name="CDTargetDate" value="<?= $row4['targetDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="CDActualDate" name="CDActualDate" value="<?= $row4['actualDate'] ?>" /></td>
                             </tr>
                             <tr>
                                 <td>Illustration (Text)</td>
-                                <td><input type="date" class="form-control" id="ITStartDate" name="ITStartDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="ITTargetDate" name="ITTargetDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="ITActualDate" name="ITActualDate" min="<?php echo date('Y-m-d'); ?>" /></td>
+                                <td><input type="date" class="form-control" id="ITStartDate" name="ITStartDate" value="<?= $row5['startDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="ITTargetDate" name="ITTargetDate" value="<?= $row5['targetDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="ITActualDate" name="ITActualDate" value="<?= $row5['actualDate'] ?>" /></td>
                             </tr>
                             <tr>
                                 <td>Illustration (Cover)</td>
-                                <td><input type="date" class="form-control" id="ICStartDate" name="ICStartDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="ICTargetDate" name="ICTargetDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="ICActualDate" name="ICActualDate" min="<?php echo date('Y-m-d'); ?>" /></td>
+                                <td><input type="date" class="form-control" id="ICStartDate" name="ICStartDate" value="<?= $row6['startDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="ICTargetDate" name="ICTargetDate" value="<?= $row6['targetDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="ICActualDate" name="ICActualDate" value="<?= $row6['actualDate'] ?>" /></td>
                             </tr>
                             <tr>
                                 <td>Graphic Layout (Text)</td>
-                                <td><input type="date" class="form-control" id="GLTStartDate" name="GLTStartDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="GLTTargetDate" name="GLTTargetDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="GLTActualDate" name="GLTActualDate" min="<?php echo date('Y-m-d'); ?>" /></td>
+                                <td><input type="date" class="form-control" id="GLTStartDate" name="GLTStartDate" value="<?= $row7['startDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="GLTTargetDate" name="GLTTargetDate" value="<?= $row7['targetDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="GLTActualDate" name="GLTActualDate" value="<?= $row7['actualDate'] ?>" /></td>
                             </tr>
                             <tr>
                                 <td>Graphic Layout (Cover)</td>
-                                <td><input type="date" class="form-control" id="GLCStartDate" name="GLCStartDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="GLCTargetDate" name="GLCTargetDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="GLCActualDate" name="GLCActualDate" min="<?php echo date('Y-m-d'); ?>" /></td>
+                                <td><input type="date" class="form-control" id="GLCStartDate" name="GLCStartDate" value="<?= $row8['startDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="GLCTargetDate" name="GLCTargetDate" value="<?= $row8['targetDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="GLCActualDate" name="GLCActualDate" value="<?= $row8['actualDate'] ?>" /></td>
                             </tr>
                             <tr>
                                 <td>Proofing & Correction</td>
-                                <td><input type="date" class="form-control" id="PCStartDate" name="PCStartDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="PCTargetDate" name="PCTargetDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="PCActualDate" name="PCActualDate" min="<?php echo date('Y-m-d'); ?>" /></td>
+                                <td><input type="date" class="form-control" id="PCStartDate" name="PCStartDate" value="<?= $row9['startDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="PCTargetDate" name="PCTargetDate" value="<?= $row9['targetDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="PCActualDate" name="PCActualDate" value="<?= $row9['actualDate'] ?>" /></td>
                             </tr>
                             <tr>
                                 <td>PDP & ISBN Application</td>
-                                <td><input type="date" class="form-control" id="PDPStartDate" name="PDPStartDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="PDPTargetDate" name="PDPTargetDate" min="<?php echo date('Y-m-d'); ?>" /></td>
-                                <td><input type="date" class="form-control" id="PDPActualDate" name="PDPActualDate" min="<?php echo date('Y-m-d'); ?>" /></td>
+                                <td><input type="date" class="form-control" id="PDPStartDate" name="PDPStartDate" value="<?= $row10['startDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="PDPTargetDate" name="PDPTargetDate" value="<?= $row10['targetDate'] ?>" /></td>
+                                <td><input type="date" class="form-control" id="PDPActualDate" name="PDPActualDate" value="<?= $row10['actualDate'] ?>" /></td>
                             </tr>
                         </table>
                     </div>
-                    <button type="submit" name="submit" class="btn btn-primary">Update</button>
+                    <button type="submit" name="submit" class="btn btn-primary">Save</button>
                     <br>
                     <hr class="hr hr-blurry" />
                 </div>
