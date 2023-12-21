@@ -251,7 +251,9 @@ if (isset($_GET['logout'])) {
             font-size: 16px;
             border: none;
             cursor: pointer;
+            text-decoration: none;
             border-radius: 4px;
+            box-shadow: 0 0px 20px 0 rgba(0, 0, 0, 0.2);
             width: 200px;
             height: 110;
         }
@@ -396,7 +398,7 @@ if (isset($_GET['logout'])) {
             <div class="dropdown" align="right">
 
 
-                <button href="newproject.php" class="dropbtn">add new project</button>
+                <a href="newproject.php" class="dropbtn">Add new project</a>
 
             </div>
         </div><br>

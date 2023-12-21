@@ -295,8 +295,8 @@ if (isset($_GET['logout'])) {
                 <div id="dropdownContent" class="dropdown-content">
 
                     <a href="reportbyCategory.php">sort by Category</a>
-                    
-                    <a href="reportbyEditor.php">sort by Editor</a>
+
+                    <a href="#">sort by Editor</a>
                     <a href="#">sort by Graphic Designer</a>
                     <a href="#">sort by Illustrator</a>
                 </div>
@@ -328,20 +328,25 @@ if (isset($_GET['logout'])) {
 
                         // Modify the SQL query to order the results by category
                         $sql = "SELECT project.*, design_layout.* 
-        FROM project 
-        INNER JOIN design_layout ON project.projectId = design_layout.projectId 
-        ORDER BY category"; // Order by the 'category' column
+                                FROM project 
+                                INNER JOIN design_layout ON project.projectId = design_layout.projectId 
+                                INNER JOIN member ON project.projectId = member.projectId 
+                                INNER JOIN editor_coordinator ON member.memberId = editor_coordinator.memberId 
+                                INNER JOIN editor_proofing ON member.memberId = editor_proofing.memberId 
+                                INNER JOIN personnel ON personnel.personnelId = editor_proofing.personnelId 
+                                INNER JOIN personnel ON personnel.personnelId = editor_coordinator.personnelId
+                                ORDER BY personnel.position"; // Order by the 'category' column
 
                         $result = mysqli_query($dbc, $sql);
 
-                        $currentCategory = null; // Variable to keep track of the current category
+                        $currentPosition = null; // Variable to keep track of the current category
 
                         while ($row = mysqli_fetch_assoc($result)) {
-                            // Check if the current row's category is different from the previous row's category
-                            if ($row['category'] !== $currentCategory) {
+                            
+                            if ($row['position'] !== $currentPosition) {
                                 // If it's a new category, display the category as the header
-                                echo '<tr><th colspan="6" style="background-color: #FDE5E6; color: black;">' . $row['category'] . '</th></tr>';
-                                $currentCategory = $row['category']; // Update the current category
+                                echo '<tr><th colspan="6" style="background-color: #FDE5E6; color: black;">' . $row['name'] . '</th></tr>';
+                                $currentPosition = $row['category']; // Update the current category
                             }
 
                             // Display the data excluding the category column
