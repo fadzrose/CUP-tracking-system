@@ -401,15 +401,15 @@ if (isset($_GET['logout'])) {
         </div><br>
         <div class="card-body">
             <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                <table class="table table-bordered" id="dataTable" width="70%" cellspacing="0">
                     <thead>
                         <tr class="head-color">
                             <th>Name</th>
                             <th>Email</th>
 
                             <th>Phone</th>
-                            <th>Action</th>
-                            
+                            <td align="center"><b>Action</b></td>
+
 
 
                         </tr>
@@ -437,7 +437,7 @@ if (isset($_GET['logout'])) {
             <td>' . $row['name'] . '</td>
             <td>' . $row['email'] . '</td>
             <td>' . $row['phone'] . '</td>
-            <td><a href="#?id=' . $row['personnelId'] . '">Edit Detail</a><br>
+            <td align="center"><a href="#?id=' . $row['personnelId'] . '">Edit Detail</a>
                 
                 <a href="#?id=' . $row['personnelId'] . '">Delete</a></td>
             
