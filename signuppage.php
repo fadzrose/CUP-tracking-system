@@ -111,7 +111,7 @@
             <div class="card-body ">
 
                 <h5 class="card-title" style="background:#ff8fab; border: 1px solid #ffe5ec;
-            border-radius: 4px; padding: 10px 20px;">Sign up</h5>
+            border-radius: 4px; padding: 10px 20px;">Register</h5>
 
                 <p class="card-text">
                 <form align="center" action="addmember.php"  method="post">

@@ -111,7 +111,7 @@
             <div class="card-body ">
 
                 <h5 class="card-title" style="background:#ff8fab; border: 1px solid #ffe5ec;
-            border-radius: 4px; padding: 10px 20px;">Log in</h5>
+            border-radius: 4px; padding: 10px 20px;">Sign in</h5>
 
                 <p class="card-text">
                 <form align="center" method="post" action="login.php">
@@ -135,7 +135,7 @@
                         </div>
                     </div>
                     <br>
-                    <button type="submit" class="btn btn-light">Submit</button>
+                    <button type="submit" class="btn btn-light">Login</button>
                 </form>
                 <br>
                 Don't have any account?<a href="signuppage.php">Sign up</a></p>
