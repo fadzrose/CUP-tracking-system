@@ -326,31 +326,29 @@ if (isset($_GET['logout'])) {
                         <?php
                         include "dbconnect.php";
 
-                        // Modify the SQL query to order the results by category
-                        $sql = "SELECT project.*, design_layout.* 
-                                FROM project 
-                                INNER JOIN design_layout ON project.projectId = design_layout.projectId 
-                                INNER JOIN member ON project.projectId = member.projectId 
-                                INNER JOIN editor_coordinator ON member.memberId = editor_coordinator.memberId 
-                                INNER JOIN editor_proofing ON member.memberId = editor_proofing.memberId 
-                                INNER JOIN personnel ON personnel.personnelId = editor_proofing.personnelId 
-                                INNER JOIN personnel ON personnel.personnelId = editor_coordinator.personnelId
-                                ORDER BY personnel.position"; // Order by the 'category' column
+                        $sql = "SELECT personnel.personnelId, personnel.name AS personnel_name, personnel.position,
+        project.title, project.siri, project.projectSize, project.totalPages, project.typeOfDesign, project.typeOfFinishing
+        FROM personnel
+        LEFT JOIN editor_coordinator ON personnel.personnelId = editor_coordinator.personnelId 
+        LEFT JOIN editor_proofing ON personnel.personnelId = editor_proofing.personnelId 
+        LEFT JOIN member ON editor_coordinator.memberId = member.memberId OR editor_proofing.memberId = member.memberId 
+        LEFT JOIN project ON member.projectId = project.projectId 
+        ORDER BY personnel.position";
 
                         $result = mysqli_query($dbc, $sql);
 
-                        $currentPosition = null; // Variable to keep track of the current category
+                        $currentPersonnelId = null; // Variable to keep track of the current personnel ID
 
                         while ($row = mysqli_fetch_assoc($result)) {
-                            
-                            if ($row['position'] !== $currentPosition) {
-                                // If it's a new category, display the category as the header
-                                echo '<tr><th colspan="6" style="background-color: #FDE5E6; color: black;">' . $row['name'] . '</th></tr>';
-                                $currentPosition = $row['category']; // Update the current category
+                            if ($row['personnelId'] !== $currentPersonnelId) {
+                                // If it's a new personnel, display the personnel's name and position as the header
+                                echo '<tr><th colspan="6" style="background-color: #FDE5E6; color: black;">' . $row['personnel_name'] . ' - ' . $row['position'] . '</th></tr>';
+                                $currentPersonnelId = $row['personnelId']; // Update the current personnel ID
                             }
 
-                            // Display the data excluding the category column
-                            echo '<tr>
+                            // Display the project details related to the current personnel
+                            if ($row['title']) {
+                                echo '<tr>
             <td>' . $row['title'] . '</td>
             <td>' . $row['siri'] . '</td>
             <td>' . $row['projectSize'] . '</td>
@@ -358,6 +356,12 @@ if (isset($_GET['logout'])) {
             <td>' . $row['typeOfDesign'] . '</td>
             <td>' . $row['typeOfFinishing'] . '</td>
           </tr>';
+                            } else {
+                                // If there's no related project, display N/A or any suitable message
+                                echo '<tr>
+            <td colspan="6">No project assigned</td>
+          </tr>';
+                            }
                         }
                         ?>
 
