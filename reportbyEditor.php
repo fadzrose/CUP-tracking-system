@@ -327,13 +327,16 @@ if (isset($_GET['logout'])) {
                         include "dbconnect.php";
 
                         $sql = "SELECT personnel.personnelId, personnel.name AS personnel_name, personnel.position,
-        project.title, project.siri, project.projectSize, project.totalPages, project.typeOfDesign, project.typeOfFinishing
-        FROM personnel
-        LEFT JOIN editor_coordinator ON personnel.personnelId = editor_coordinator.personnelId 
-        LEFT JOIN editor_proofing ON personnel.personnelId = editor_proofing.personnelId 
-        LEFT JOIN member ON editor_coordinator.memberId = member.memberId OR editor_proofing.memberId = member.memberId 
-        LEFT JOIN project ON member.projectId = project.projectId 
-        ORDER BY personnel.position";
+                        COUNT(project.projectId) AS project_count,
+                        project.title, project.siri, project.projectSize, project.totalPages, project.typeOfDesign, project.typeOfFinishing
+                        FROM personnel
+                        LEFT JOIN editor_coordinator ON personnel.personnelId = editor_coordinator.personnelId 
+                        LEFT JOIN editor_proofing ON personnel.personnelId = editor_proofing.personnelId 
+                        LEFT JOIN member ON editor_coordinator.memberId = member.memberId OR editor_proofing.memberId = member.memberId 
+                        LEFT JOIN project ON member.projectId = project.projectId 
+                        WHERE personnel.position = 'editor'
+                        GROUP BY personnel.personnelId, personnel.name, personnel.position
+                        ORDER BY project_count DESC";
 
                         $result = mysqli_query($dbc, $sql);
 
@@ -349,18 +352,18 @@ if (isset($_GET['logout'])) {
                             // Display the project details related to the current personnel
                             if ($row['title']) {
                                 echo '<tr>
-            <td>' . $row['title'] . '</td>
-            <td>' . $row['siri'] . '</td>
-            <td>' . $row['projectSize'] . '</td>
-            <td>' . $row['totalPages'] . '</td>
-            <td>' . $row['typeOfDesign'] . '</td>
-            <td>' . $row['typeOfFinishing'] . '</td>
-          </tr>';
+                                <td>' . $row['title'] . '</td>
+                                <td>' . $row['siri'] . '</td>
+                                <td>' . $row['projectSize'] . '</td>
+                                <td>' . $row['totalPages'] . '</td>
+                                <td>' . $row['typeOfDesign'] . '</td>
+                                <td>' . $row['typeOfFinishing'] . '</td>
+                            </tr>';
                             } else {
                                 // If there's no related project, display N/A or any suitable message
                                 echo '<tr>
-            <td colspan="6">No project assigned</td>
-          </tr>';
+                                    <td colspan="6">No project assigned</td>
+                                </tr>';
                             }
                         }
                         ?>
